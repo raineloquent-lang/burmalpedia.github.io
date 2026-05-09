@@ -2,9 +2,311 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>BurmalPedia</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BurmalPedia — Вики-система</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: #1a1a2e;
+            color: white;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+        }
+        
+        /* Верхняя панель */
+        .topbar {
+            background: #16213e;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+        
+        .nav a:hover { color: #e94560; }
+        
+        .nav .download-btn {
+            background: #e94560;
+            padding: 8px 20px;
+            border-radius: 8px;
+        }
+        
+        .nav .download-btn:hover {
+            background: #c0392b;
+            color: white;
+        }
+        
+        /* Главный блок */
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #16213e, #0f3460);
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #e94560;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            color: #ccc;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+        
+        .hero .btn {
+            background: #e94560;
+            color: white;
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 20px;
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+        
+        .hero .btn:hover { transform: scale(1.05); }
+        
+        /* Блок функций */
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            padding: 60px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            background: #16213e;
+            border-radius: 15px;
+            padding: 30px;
+            width: 280px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover { transform: translateY(-5px); }
+        
+        .feature-card .icon { font-size: 40px; margin-bottom: 15px; }
+        
+        .feature-card h3 {
+            color: #4ecca3;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .feature-card p {
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        /* Блок "Как работает" */
+        .how-it-works {
+            background: #16213e;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        
+        .how-it-works h2 {
+            font-size: 32px;
+            margin-bottom: 40px;
+            color: #4ecca3;
+        }
+        
+        .steps {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .step {
+            width: 250px;
+            text-align: center;
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: #e94560;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        /* Технологии */
+        .tech {
+            padding: 60px 20px;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .tech h2 { color: #e94560; margin-bottom: 30px; font-size: 28px; }
+        
+        .tech-tags {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .tech-tag {
+            background: #0f3460;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            border: 1px solid #4ecca3;
+            color: #4ecca3;
+        }
+        
+        /* Подвал */
+        footer {
+            background: #0f3460;
+            text-align: center;
+            padding: 25px;
+            color: #888;
+            font-size: 14px;
+        }
+        
+        footer a { color: #4ecca3; text-decoration: none; }
+        
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 32px; }
+            .topbar { flex-direction: column; gap: 10px; }
+            .nav a { margin: 0 10px; }
+        }
+    </style>
 </head>
 <body>
-    <h1>BurmalPedia работает!</h1>
+
+    <!-- Верхняя панель -->
+    <header class="topbar">
+        <div class="logo">📚 BurmalPedia</div>
+        <nav class="nav">
+            <a href="#features">Функции</a>
+            <a href="#how">Как работает</a>
+            <a href="#tech">Технологии</a>
+            <a href="#" class="download-btn">📥 Скачать</a>
+        </nav>
+    </header>
+
+    <!-- Главный блок -->
+    <section class="hero">
+        <h1>BurmalPedia</h1>
+        <p>Современная вики-система с облачной базой данных, продвинутой модерацией и удобным десктопным приложением.</p>
+        <a href="#" class="btn">📥 Скачать приложение</a>
+    </section>
+
+    <!-- Функции -->
+    <section id="features" class="features">
+        <div class="feature-card">
+            <div class="icon">👥</div>
+            <h3>Система ролей</h3>
+            <p>User, Moder, Admin — гибкая иерархия пользователей с разными правами</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">📝</div>
+            <h3>Тикеты</h3>
+            <p>Пользователи предлагают статьи, модераторы и админы проверяют</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">☁️</div>
+            <h3>Облачная БД</h3>
+            <p>Microsoft SQL Server в облаке — доступ 24/7 из любой точки</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">⭐</div>
+            <h3>Модерация</h3>
+            <p>Звёздная система — модераторы выбирают лучшие предложения</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">🔐</div>
+            <h3>Безопасность</h3>
+            <p>SHA-256 хеширование паролей, блокировка с апелляцией</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">🎨</div>
+            <h3>Тёмный дизайн</h3>
+            <p>Современный интерфейс в тёмных тонах с неоновыми акцентами</p>
+        </div>
+    </section>
+
+    <!-- Как работает -->
+    <section id="how" class="how-it-works">
+        <h2>Как это работает</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3 style="color:#4ecca3;">Регистрация</h3>
+                <p style="color:#ccc;">Создайте аккаунт в приложении</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3 style="color:#4ecca3;">Тикет</h3>
+                <p style="color:#ccc;">Отправьте предложение статьи</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3 style="color:#4ecca3;">Модерация</h3>
+                <p style="color:#ccc;">Модератор выбирает лучшее</p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3 style="color:#4ecca3;">Публикация</h3>
+                <p style="color:#ccc;">Админ одобряет — статья в вики!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Технологии -->
+    <section id="tech" class="tech">
+        <h2>Технологии</h2>
+        <div class="tech-tags">
+            <span class="tech-tag">C# WPF (.NET)</span>
+            <span class="tech-tag">Microsoft SQL Server</span>
+            <span class="tech-tag">Azure SQL / SmarterASP</span>
+            <span class="tech-tag">Entity Framework</span>
+            <span class="tech-tag">SHA-256</span>
+            <span class="tech-tag">Cloud Database</span>
+            <span class="tech-tag">REST API</span>
+        </div>
+    </section>
+
+    <!-- Подвал -->
+    <footer>
+        <p>© 2026 <a href="#">BurmalPedia</a>. Создано с ❤️ | <a href="#">GitHub</a></p>
+    </footer>
+
 </body>
 </html>
