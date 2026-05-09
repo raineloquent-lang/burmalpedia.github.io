@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Скачать BurmalPedia</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: #1a1a2e;
+            color: white;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .card {
+            background: #16213e;
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            max-width: 550px;
+            margin: 20px;
+        }
+        
+        .card .emoji { font-size: 60px; margin-bottom: 20px; }
+        
+        .card h1 {
+            font-size: 28px;
+            color: #e94560;
+            margin-bottom: 15px;
+        }
+        
+        .card .notice {
+            background: #0f3460;
+            border-left: 4px solid #4ecca3;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 25px 0;
+            text-align: left;
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .card .notice .icon { color: #4ecca3; font-size: 24px; }
+        
+        .btn {
+            background: #e94560;
+            color: white;
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 18px;
+            display: inline-block;
+            margin: 10px 0;
+            transition: transform 0.3s;
+        }
+        
+        .btn:hover { transform: scale(1.05); }
+        
+        .btn-alt {
+            background: #4ecca3;
+            margin-left: 10px;
+        }
+        
+        .back-link {
+            display: block;
+            color: #4ecca3;
+            text-decoration: none;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="emoji">📥</div>
+        <h1>Скачать BurmalPedia</h1>
+        <p style="color:#ccc;">Версия 1.0 | Windows 10/11</p>
+        
+        <div class="notice">
+            <p>
+                <span class="icon">💡</span> <strong style="color:#4ecca3;">Небольшое пояснение:</strong><br><br>
+                Сейчас вас перекинет на Яндекс.Диск. Почему? GitHub не даёт загружать файлы больше 25 МБ, а наш установщик весит больше.<br><br>
+                <strong style="color:#4ecca3;">Хорошая новость:</strong> обновления будут выходить быстрее! Нам не нужно каждый раз менять код сайта — просто заливаем новую версию на Яндекс.Диск, и вы получаете её моментально. Удобно же? 😊
+            </p>
+        </div>
+        
+        <a href="ТВОЯ_ССЫЛКА_НА_ЯНДЕКС_ДИСК" class="btn">📥 Скачать установщик</a>
+        <br>
+        <a href="index.html" class="back-link">← Вернуться на главную</a>
+    </div>
+</body>
+</html>
