@@ -27,6 +27,9 @@
         .article-full { background: #16213e; border-radius: 12px; padding: 25px; }
         .article-full h1 { color: #e94560; margin-bottom: 10px; }
         .article-full .content { color: #ccc; line-height: 1.8; white-space: pre-wrap; }
+        .comment { background: #0f3460; border-radius: 8px; padding: 10px; margin-bottom: 8px; }
+        .comment-author { color: #4ecca3; font-size: 13px; }
+        .comment-text { margin-top: 5px; font-size: 14px; }
         .search-box { padding: 8px 12px; border-radius: 8px; border: none; background: #0f3460; color: white; width: 200px; }
         .user-info { color: #4ecca3; font-size: 14px; }
         @media (max-width: 600px) { .header { flex-direction: column; } .nav { flex-wrap: wrap; justify-content: center; } }
@@ -47,7 +50,7 @@
 
     <div class="container" id="content"><p style="text-align:center;padding:40px;">Загрузка...</p></div>
 
-    <!-- Модальные окна -->
+    <!-- Модалки -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <h2 style="color:#e94560;margin-bottom:15px;">🔐 Вход</h2>
@@ -72,16 +75,16 @@
     </div>
 
     <div class="modal" id="ticketModal">
-    <div class="modal-content">
-        <h2 style="color:#4ecca3;margin-bottom:15px;">📝 Предложить статью</h2>
-        <input type="text" id="ticketTitle" placeholder="Название статьи">
-        <input type="text" id="ticketSummary" placeholder="Краткое описание">
-        <textarea id="ticketDesc" placeholder="Содержание статьи..."></textarea>
-        <button class="btn btn-green" onclick="sendTicket()" style="width:100%;margin-top:10px;">Отправить</button>
-        <button class="btn btn-blue" onclick="closeModals()" style="width:100%;margin-top:5px;">Закрыть</button>
-        <p id="ticketMsg" style="margin-top:10px;"></p>
+        <div class="modal-content">
+            <h2 style="color:#4ecca3;margin-bottom:15px;">📝 Предложить статью</h2>
+            <input type="text" id="ticketTitle" placeholder="Название статьи">
+            <input type="text" id="ticketSummary" placeholder="Краткое описание">
+            <textarea id="ticketDesc" placeholder="Содержание статьи..."></textarea>
+            <button class="btn btn-green" onclick="sendTicket()" style="width:100%;margin-top:10px;">Отправить</button>
+            <button class="btn btn-blue" onclick="closeModals()" style="width:100%;margin-top:5px;">Закрыть</button>
+            <p id="ticketMsg" style="margin-top:10px;"></p>
+        </div>
     </div>
-</div>
 
     <script>
         const API = 'https://reloquent-001-site1.site4future.com';
@@ -103,9 +106,7 @@
 
         function showLogin() { document.getElementById('loginModal').style.display = 'flex'; }
         function showRegister() { document.getElementById('registerModal').style.display = 'flex'; }
-        function closeModals() {
-            document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
-        }
+        function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); }
 
         async function login() {
             const u = document.getElementById('loginUsername').value;
@@ -138,7 +139,7 @@
             }
         }
 
-        function logout() { currentUser = null; localStorage.removeItem('burmal_user'); updateUI(); }
+        function logout() { currentUser = null; localStorage.removeItem('burmal_user'); updateUI(); window.location.reload(); }
 
         async function loadArticles() {
             const res = await fetch(API + '/articles.ashx?action=all');
@@ -163,13 +164,50 @@
         async function loadArticle(id) {
             const res = await fetch(API + '/articles.ashx?id=' + id);
             const a = await res.json();
-            document.getElementById('content').innerHTML = `
+            let html = `
                 <div class="article-full">
                     <button class="btn btn-blue" onclick="loadArticles()" style="margin-bottom:15px;">← Назад</button>
                     <h1>${a.title}</h1>
                     <small style="color:#888;">📅 ${a.date}</small>
                     <div class="content" style="margin-top:15px;">${a.content}</div>
-                </div>`;
+                    <hr style="border-color:#0f3460;margin:20px 0;">
+                    <h3 style="color:#4ecca3;margin-bottom:10px;">💬 Комментарии</h3>
+                    <div id="commentsList">Загрузка...</div>
+            `;
+            if (currentUser) {
+                html += `
+                    <div style="display:flex;gap:8px;margin-top:15px;">
+                        <input type="text" id="commentInput" placeholder="Ваш комментарий..." style="flex:1;padding:8px;background:#0f3460;border:none;border-radius:8px;color:white;">
+                        <button class="btn btn-green" onclick="addComment(${a.id})">💬</button>
+                    </div>
+                `;
+            }
+            html += '</div>';
+            document.getElementById('content').innerHTML = html;
+            loadComments(id);
+        }
+
+        async function loadComments(articleId) {
+            const res = await fetch(API + '/comments.ashx?articleId=' + articleId);
+            const comments = await res.json();
+            let html = '';
+            comments.forEach(c => {
+                html += `<div class="comment"><div class="comment-author">👤 ${c.author} • ${c.date}</div><div class="comment-text">${c.content}</div></div>`;
+            });
+            if (!html) html = '<p style="color:#888;">Пока нет комментариев</p>';
+            document.getElementById('commentsList').innerHTML = html;
+        }
+
+        async function addComment(articleId) {
+            const content = document.getElementById('commentInput').value;
+            if (!content) return;
+            const form = new FormData();
+            form.append('articleId', articleId);
+            form.append('userId', currentUser.userId);
+            form.append('content', content);
+            await fetch(API + '/comments.ashx?action=add', { method: 'POST', body: form });
+            loadComments(articleId);
+            document.getElementById('commentInput').value = '';
         }
 
         async function search() {
@@ -179,7 +217,7 @@
             const articles = await res.json();
             let html = '';
             articles.forEach(a => html += `<div class="card" onclick="loadArticle(${a.id})"><h3>${a.title}</h3><p>${a.summary||''}</p></div>`);
-            if (!html) html = '<p style="text-align:center;">Ничего не найдено</p>';
+            if (!html) html = '<p style="text-align:center;padding:40px;">Ничего не найдено</p>';
             document.getElementById('content').innerHTML = html;
         }
 
@@ -188,7 +226,7 @@
             document.getElementById('ticketModal').style.display = 'flex';
         }
 
-       async function sendTicket() {
+        async function sendTicket() {
             const t = document.getElementById('ticketTitle').value;
             const s = document.getElementById('ticketSummary').value;
             const d = document.getElementById('ticketDesc').value;
@@ -202,6 +240,7 @@
             document.getElementById('ticketMsg').textContent = data.message || data.error;
             if (data.success) setTimeout(() => { closeModals(); }, 1500);
         }
+
         document.getElementById('searchInput').addEventListener('keypress', e => { if (e.key === 'Enter') search(); });
         updateUI();
         loadArticles();
