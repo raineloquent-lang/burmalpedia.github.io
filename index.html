@@ -94,7 +94,7 @@
             margin-bottom: 20px;
         }
         
-        .hero .btn {
+        .hero .btn {   
             padding: 15px 35px;
             text-decoration: none;
             border-radius: 10px;
@@ -102,26 +102,27 @@
             display: inline-block;
             transition: transform 0.3s;
         }
-        
+
         .hero .btn:hover { transform: scale(1.05); }
+
+        .btn-web {
+            background: #4ecca3;
+            color: white;
+        }
         
         .btn-download {
             background: #e94560;
             color: white;
-        }
-        
+        }        
+
         .btn-telegram {
             background: #0088cc;
             color: white;
         }
-        
-        .btn-download:hover {
-            background: #c0392b;
-        }
-        
-        .btn-telegram:hover {
-            background: #0077b5;
-        }
+
+        .btn-web:hover { background: #3da88a; }
+        .btn-download:hover { background: #c0392b; }
+        .btn-telegram:hover { background: #0077b5; }
         
         /* Блок функций */
         .features {
@@ -300,16 +301,18 @@
     </nav>
 </header>
 
-    <!-- Главный блок -->
-    <section class="hero">
-        <h1>BurmalPedia</h1>
-        <p>Современная вики-система с облачной базой данных, продвинутой модерацией и удобным десктопным приложением.</p>
-        <div class="hero-buttons">
-            <a href="download.html" class="btn btn-download">📥 Скачать приложение</a>
-            <a href="https://t.me/burmalpedia" class="btn btn-telegram" target="_blank">📢 Telegram-канал</a>
-        </div>
-    </section>
-
+   <!-- Главный блок -->
+<section class="hero">
+    <h1>BurmalPedia</h1>
+    <p>Современная вики-система с облачной базой данных, продвинутой модерацией и удобным десктопным приложением.</p>
+    <div class="hero-buttons">
+        <a href="web.html" class="btn btn-web">🌐 Веб-версия</a>
+        <a href="download.html" class="btn btn-download">📥 Скачать</a>
+    </div>
+    <div class="hero-buttons" style="margin-top: 10px;">
+        <a href="https://t.me/ТВОЙ_КАНАЛ" class="btn btn-telegram" target="_blank">📢 Telegram-канал</a>
+    </div>
+</section>
    <!-- Функции -->
 <section id="features" class="features">
     <div class="feature-card">
