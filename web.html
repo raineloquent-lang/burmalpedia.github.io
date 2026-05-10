@@ -253,7 +253,7 @@
             document.getElementById('ticketModal').style.display = 'flex';
         }
 
-        async function sendTicket() {
+         async function sendTicket() {
             const t = document.getElementById('ticketTitle').value;
             const s = document.getElementById('ticketSummary').value;
             const d = document.getElementById('ticketDesc').value;
@@ -264,7 +264,10 @@
             form.append('priority', 'Normal');
             const res = await fetch(API + '/ticket.ashx', { method: 'POST', body: form });
             const data = await res.json();
-            document.getElementById('ticketMsg').textContent = data.message || data.error;
+            document.getElementById('ticketMsg').textContent = 
+                data.message || 
+                (data.error === 'Account is blocked' ? 'Аккаунт заблокирован!' : 
+                 data.error === 'Fill all fields' ? 'Заполните все поля!' : data.error);
             if (data.success) setTimeout(() => { closeModals(); }, 1500);
         }
         function showAppeal() { document.getElementById('appealModal').style.display = 'flex'; }
