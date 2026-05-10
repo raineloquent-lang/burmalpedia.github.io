@@ -237,13 +237,53 @@
         footer a { color: #4ecca3; text-decoration: none; }
         
         /* Адаптивность */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 32px; }
-            .topbar { flex-direction: column; gap: 10px; }
-            .nav a { margin: 0 10px; }
-            .hero-buttons { flex-direction: column; align-items: center; }
-            .hero .btn { width: 80%; text-align: center; }
+    @media (max-width: 768px) {
+        .hero h1 { font-size: 32px; }
+    
+        .topbar { 
+            flex-direction: column; 
+            gap: 12px; 
+            padding: 15px;
         }
+    
+        .logo {
+            font-size: 22px;
+            text-align: center;
+        }
+    
+        .nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+    
+        .nav a {
+            margin: 0 5px;
+            font-size: 12px;
+            padding: 6px 12px;
+        }
+    
+        .nav .download-btn,
+        .nav .tg-btn {
+            padding: 6px 15px;
+            font-size: 12px;
+        }
+    
+        .hero-buttons { 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 12px;
+        }
+    
+        .hero .btn { 
+            width: 85%; 
+            text-align: center;
+            font-size: 16px;
+            padding: 12px 25px;
+        }
+    }
+        
     </style>
 </head>
 <body>
