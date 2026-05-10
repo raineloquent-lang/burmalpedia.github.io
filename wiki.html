@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BurmalPedia Wiki</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #1a1a2e; color: white; font-family: 'Segoe UI', Arial, sans-serif; }
+        .header { background: #16213e; padding: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .logo { font-size: 24px; font-weight: bold; color: #e94560; }
+        .nav a { color: white; text-decoration: none; margin-left: 15px; }
+        .search-box { padding: 10px; border-radius: 8px; border: none; background: #0f3460; color: white; width: 250px; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+        .article-card { background: #16213e; border-radius: 12px; padding: 25px; margin-bottom: 15px; cursor: pointer; transition: transform 0.2s; }
+        .article-card:hover { transform: translateY(-3px); }
+        .article-card h3 { color: #4ecca3; margin-bottom: 10px; }
+        .article-card p { color: #ccc; margin-bottom: 8px; }
+        .article-card .date { color: #888; font-size: 13px; }
+        .article-full { background: #16213e; border-radius: 12px; padding: 30px; }
+        .article-full h1 { color: #e94560; margin-bottom: 15px; }
+        .article-full .content { color: #ccc; line-height: 1.8; white-space: pre-wrap; }
+        .btn { background: #e94560; color: white; padding: 10px 25px; border: none; border-radius: 8px; cursor: pointer; text-decoration: none; display: inline-block; }
+        .day-banner { background: linear-gradient(135deg, #e94560, #0f3460); border-radius: 12px; padding: 30px; margin-bottom: 25px; }
+        .day-banner h2 { color: #f1c40f; margin-bottom: 10px; }
+        .day-banner p { color: #ccc; }
+        .loading { text-align: center; padding: 40px; color: #888; }
+        @media (max-width: 600px) { .header { flex-direction: column; text-align: center; } }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">📚 BurmalPedia Wiki</div>
+        <div class="nav">
+            <input type="text" class="search-box" id="searchInput" placeholder="🔍 Поиск статей...">
+            <button class="btn" onclick="search()">Найти</button>
+            <a href="index.html" class="btn" style="background:#0f3460;">← На главную</a>
+        </div>
+    </div>
+
+    <div class="container" id="content">
+        <div class="loading">Загрузка статей...</div>
+    </div>
+
+    <script>
+        const API = 'http://reloquent-001-site1.site4future.com/burmalpedia/api/articles.ashx';
+        
+        async function loadArticles() {
+            const res = await fetch(API + '?action=all');
+            const articles = await res.json();
+            renderArticles(articles);
+        }
+        
+        function renderArticles(articles) {
+            let html = '<div id="dayBanner"></div>';
+            articles.forEach(a => {
+                html += `
+                    <div class="article-card" onclick="loadArticle(${a.id})">
+                        <h3>${a.title}</h3>
+                        <p>${a.summary || 'Описание отсутствует'}</p>
+                        <div class="date">📅 ${a.date}</div>
+                    </div>
+                `;
+            });
+            document.getElementById('content').innerHTML = html;
+            loadArticleOfDay();
+        }
+        
+        async function loadArticleOfDay() {
+            const res = await fetch(API + '?action=day');
+            const data = await res.json();
+            if (!data.error) {
+                document.getElementById('dayBanner').innerHTML = `
+                    <div class="day-banner" onclick="loadArticle(${data.id})">
+                        <h2>⭐ СТАТЬЯ ДНЯ</h2>
+                        <h3>${data.title}</h3>
+                        <p>${data.summary || ''}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        async function loadArticle(id) {
+            const res = await fetch(API + '?id=' + id);
+            const a = await res.json();
+            document.getElementById('content').innerHTML = `
+                <div class="article-full">
+                    <button class="btn" onclick="loadArticles()" style="background:#0f3460;margin-bottom:20px;">← Назад</button>
+                    <h1>${a.title}</h1>
+                    <div class="date" style="margin-bottom:20px;">📅 ${a.date}</div>
+                    <div class="content">${a.content}</div>
+                </div>
+            `;
+        }
+        
+        async function search() {
+            const q = document.getElementById('searchInput').value;
+            if (!q) { loadArticles(); return; }
+            const res = await fetch(API + '?action=search&q=' + encodeURIComponent(q));
+            const articles = await res.json();
+            if (articles.length === 0) {
+                document.getElementById('content').innerHTML = '<p style="text-align:center;padding:40px;">Ничего не найдено. <a href="index.html">Предложить статью?</a></p>';
+                return;
+            }
+            renderArticles(articles);
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') search();
+        });
+        
+        loadArticles();
+    </script>
+</body>
+</html>
