@@ -49,6 +49,10 @@
     </div>
 
     <div class="container" id="content"><p style="text-align:center;padding:40px;">Загрузка...</p></div>
+    <div id="appealBanner" style="display:none;background:#c0392b;padding:15px;text-align:center;margin-bottom:15px;border-radius:10px;">
+    <p style="margin-bottom:10px;">⚠️ Ваш аккаунт заблокирован!</p>
+    <button class="btn btn-red" onclick="showAppeal()">📨 Подать апелляцию</button>
+</div>
 
     <div class="modal" id="loginModal">
         <div class="modal-content">
@@ -83,7 +87,16 @@
             <button class="btn btn-blue" onclick="closeModals()" style="width:100%;margin-top:5px;">Закрыть</button>
             <p id="ticketMsg" style="margin-top:10px;"></p>
         </div>
+        <div class="modal" id="appealModal">
+    <div class="modal-content">
+        <h2 style="color:#e94560;margin-bottom:15px;">📨 Апелляция</h2>
+        <p style="margin-bottom:10px;color:#ccc;">Опишите почему вас надо разблокировать:</p>
+        <textarea id="appealMessage" placeholder="Ваше сообщение..."></textarea>
+        <button class="btn btn-red" onclick="sendAppeal()" style="width:100%;margin-top:10px;">Отправить</button>
+        <button class="btn btn-blue" onclick="closeModals()" style="width:100%;margin-top:5px;">Закрыть</button>
+        <p id="appealMsg" style="margin-top:10px;"></p>
     </div>
+</div>
 
     <script>
         const API = 'https://reloquent-001-site1.site4future.com';
@@ -95,11 +108,18 @@
                 document.getElementById('loginBtn').style.display = 'none';
                 document.getElementById('registerBtn').style.display = 'none';
                 document.getElementById('logoutBtn').style.display = 'inline-block';
+        
+                if (currentUser.isBlocked) {
+                    document.getElementById('appealBanner').style.display = 'block';
+                } else {
+                    document.getElementById('appealBanner').style.display = 'none';
+                }
             } else {
                 document.getElementById('userInfo').textContent = '';
                 document.getElementById('loginBtn').style.display = 'inline-block';
                 document.getElementById('registerBtn').style.display = 'inline-block';
                 document.getElementById('logoutBtn').style.display = 'none';
+                document.getElementById('appealBanner').style.display = 'none';
             }
         }
 
@@ -247,6 +267,20 @@
             document.getElementById('ticketMsg').textContent = data.message || data.error;
             if (data.success) setTimeout(() => { closeModals(); }, 1500);
         }
+        function showAppeal() { document.getElementById('appealModal').style.display = 'flex'; }
+
+        async function sendAppeal() {
+            const msg = document.getElementById('appealMessage').value;
+            if (!msg) return;
+            const form = new FormData();
+            form.append('userId', currentUser.userId);
+            form.append('message', msg);
+            const res = await fetch(API + '/appeal.ashx', { method: 'POST', body: form });
+            const data = await res.json();
+            document.getElementById('appealMsg').textContent = data.message || data.error;
+            if (data.success) setTimeout(() => { closeModals(); }, 1500);
+        }
+        
 
         document.getElementById('searchInput').addEventListener('keypress', e => { if (e.key === 'Enter') search(); });
         updateUI();
