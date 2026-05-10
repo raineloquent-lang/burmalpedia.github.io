@@ -74,18 +74,42 @@
             line-height: 1.6;
         }
         
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
         .hero .btn {
-            background: #e94560;
-            color: white;
-            padding: 15px 40px;
+            padding: 15px 35px;
             text-decoration: none;
             border-radius: 10px;
-            font-size: 20px;
+            font-size: 18px;
             display: inline-block;
             transition: transform 0.3s;
         }
         
         .hero .btn:hover { transform: scale(1.05); }
+        
+        .btn-download {
+            background: #e94560;
+            color: white;
+        }
+        
+        .btn-telegram {
+            background: #0088cc;
+            color: white;
+        }
+        
+        .btn-download:hover {
+            background: #c0392b;
+        }
+        
+        .btn-telegram:hover {
+            background: #0077b5;
+        }
         
         /* Блок функций */
         .features {
@@ -205,6 +229,8 @@
             .hero h1 { font-size: 32px; }
             .topbar { flex-direction: column; gap: 10px; }
             .nav a { margin: 0 10px; }
+            .hero-buttons { flex-direction: column; align-items: center; }
+            .hero .btn { width: 80%; text-align: center; }
         }
     </style>
 </head>
@@ -225,7 +251,10 @@
     <section class="hero">
         <h1>BurmalPedia</h1>
         <p>Современная вики-система с облачной базой данных, продвинутой модерацией и удобным десктопным приложением.</p>
-        <a href="download.html" class="btn">📥 Скачать приложение</a>
+        <div class="hero-buttons">
+            <a href="download.html" class="btn btn-download">📥 Скачать приложение</a>
+            <a href="https://t.me/ТВОЙ_КАНАЛ" class="btn btn-telegram" target="_blank">📢 Telegram-канал</a>
+        </div>
     </section>
 
     <!-- Функции -->
@@ -305,7 +334,7 @@
 
     <!-- Подвал -->
     <footer>
-        <p>© 2026 <a href="#">BurmalPedia</a>. Создано с ❤️ | <a href="#">GitHub</a></p>
+        <p>© 2026 <a href="#">BurmalPedia</a>. Создано с ❤️ | <a href="https://t.me/ТВОЙ_КАНАЛ" target="_blank">Telegram</a> | <a href="#">GitHub</a></p>
     </footer>
 
 </body>
