@@ -118,12 +118,16 @@
                 currentUser = data;
                 localStorage.setItem('burmal_user', JSON.stringify(data));
                 updateUI(); closeModals(); loadArticles();
-            } else {
-                document.getElementById('loginError').textContent =
-                    data.error === 'Wrong username or password' ? 'Неверный логин или пароль' :
-                    data.error === 'Account is blocked' ? 'Аккаунт заблокирован' : data.error;
+        
+            if (data.isBlocked) {
+                    alert('⚠️ Ваш аккаунт заблокирован!\nПричина: ' + (data.blockReason || 'Не указана') + 
+                          '\n\nВы можете подать апелляцию.');
             }
+        } else {
+            document.getElementById('loginError').textContent =
+                data.error === 'Wrong username or password' ? 'Неверный логин или пароль' : data.error;
         }
+    }
 
         async function register() {
             const u = document.getElementById('regUsername').value;
