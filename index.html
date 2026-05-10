@@ -14,8 +14,7 @@
             min-height: 100vh;
         }
         
-        /* Верхняя панель */
-         .topbar {
+        .topbar {
             background: #16213e;
             padding: 15px 30px;
             display: flex;
@@ -24,19 +23,8 @@
             position: sticky;
             top: 0;
             z-index: 100;
-        }
-        
-       .nav .tg-btn {
-            background: transparent;
-            padding: 4px 8px;
-            border-radius: 8px;
-            transition: background 0.3s;
-            display: flex;
-            align-items: center;
-        }
-
-        .nav .tg-btn:hover {
-            background: #0088cc;
+            flex-wrap: wrap;
+            gap: 12px;
         }
         
         .logo {
@@ -45,20 +33,30 @@
             color: white;
         }
         
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
         .nav a {
             color: white;
             text-decoration: none;
-            margin-left: 20px;
             font-size: 14px;
             transition: color 0.3s;
+            white-space: nowrap;
         }
         
         .nav a:hover { color: #e94560; }
         
         .nav .download-btn {
             background: #e94560;
-            padding: 8px 20px;
+            padding: 10px 20px;
             border-radius: 8px;
+            height: 40px;
+            display: flex;
+            align-items: center;
         }
         
         .nav .download-btn:hover {
@@ -66,7 +64,23 @@
             color: white;
         }
         
-        /* Главный блок */
+        .nav .tg-btn {
+            padding: 0;
+            display: flex;
+            align-items: center;
+            height: 40px;
+        }
+        
+        .nav .tg-btn img {
+            width: 36px;
+            height: 36px;
+            transition: transform 0.3s;
+        }
+        
+        .nav .tg-btn:hover img {
+            transform: scale(1.1);
+        }
+        
         .hero {
             text-align: center;
             padding: 80px 20px;
@@ -90,42 +104,25 @@
         .hero-buttons {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 20px;
             flex-wrap: wrap;
-            margin-bottom: 20px;
         }
         
-        .hero .btn {   
-            padding: 15px 35px;
+        .hero .btn {
+            padding: 16px 40px;
             text-decoration: none;
             border-radius: 10px;
             font-size: 18px;
             display: inline-block;
             transition: transform 0.3s;
         }
-
+        
         .hero .btn:hover { transform: scale(1.05); }
-
-        .btn-web {
-            background: #4ecca3;
-            color: white;
-        }
         
-        .btn-download {
-            background: #e94560;
-            color: white;
-        }        
-
-        .btn-telegram {
-            background: #0088cc;
-            color: white;
-        }
-
-        .btn-web:hover { background: #3da88a; }
-        .btn-download:hover { background: #c0392b; }
-        .btn-telegram:hover { background: #0077b5; }
+        .btn-web { background: #4ecca3; color: white; }
+        .btn-download { background: #e94560; color: white; }
+        .btn-telegram { background: #0088cc; color: white; }
         
-        /* Блок функций */
         .features {
             display: flex;
             justify-content: center;
@@ -146,33 +143,17 @@
         }
         
         .feature-card:hover { transform: translateY(-5px); }
-        
         .feature-card .icon { font-size: 40px; margin-bottom: 15px; }
+        .feature-card h3 { color: #4ecca3; margin-bottom: 10px; font-size: 18px; }
+        .feature-card p { color: #ccc; font-size: 14px; line-height: 1.5; }
         
-        .feature-card h3 {
-            color: #4ecca3;
-            margin-bottom: 10px;
-            font-size: 18px;
-        }
-        
-        .feature-card p {
-            color: #ccc;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-        
-        /* Блок "Как работает" */
         .how-it-works {
             background: #16213e;
             padding: 60px 20px;
             text-align: center;
         }
         
-        .how-it-works h2 {
-            font-size: 32px;
-            margin-bottom: 40px;
-            color: #4ecca3;
-        }
+        .how-it-works h2 { font-size: 32px; margin-bottom: 40px; color: #4ecca3; }
         
         .steps {
             display: flex;
@@ -183,14 +164,10 @@
             margin: 0 auto;
         }
         
-        .step {
-            width: 250px;
-            text-align: center;
-        }
+        .step { width: 250px; text-align: center; }
         
         .step-number {
-            width: 60px;
-            height: 60px;
+            width: 60px; height: 60px;
             background: #e94560;
             border-radius: 50%;
             display: flex;
@@ -201,7 +178,6 @@
             font-weight: bold;
         }
         
-        /* Технологии */
         .tech {
             padding: 60px 20px;
             text-align: center;
@@ -227,7 +203,6 @@
             color: #4ecca3;
         }
         
-        /* Подвал */
         footer {
             background: #0f3460;
             text-align: center;
@@ -238,176 +213,83 @@
         
         footer a { color: #4ecca3; text-decoration: none; }
         
-        /* Адаптивность */
-    @media (max-width: 768px) {
-        .hero h1 { font-size: 32px; }
-    
-        .topbar { 
-            flex-direction: column; 
-            gap: 12px; 
-            padding: 15px;
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 32px; }
+            .topbar { flex-direction: column; gap: 10px; }
+            .nav { justify-content: center; }
+            .hero-buttons { flex-direction: column; align-items: center; }
+            .hero .btn { width: 85%; text-align: center; }
         }
-    
-        .logo {
-            font-size: 22px;
-            text-align: center;
-        }
-    
-        .nav {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-    
-        .nav a {
-            margin: 0 5px;
-            font-size: 12px;
-            padding: 6px 12px;
-        }
-    
-        .nav .download-btn,
-        .nav .tg-btn {
-            height: 38px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .nav .download-btn {
-            background: #e94560;
-            padding: 8px 20px;
-            border-radius: 8px;
-        }
-
-        .nav .tg-btn {
-            background: transparent;
-            padding: 4px 10px;
-            border-radius: 8px;
-        }
-    }
-        
     </style>
 </head>
 <body>
 
-    <!-- Верхняя панель -->
-<header class="topbar">
-    <div class="logo">📚 BurmalPedia</div>
-    <nav class="nav">
-        <a href="#features">Функции</a>
-        <a href="#how">Как работает</a>
-        <a href="#tech">Технологии</a>
-       <a href="https://t.me/burmalpedia" class="tg-btn" target="_blank">
-           <img src="https://store-images.s-microsoft.com/image/apps.55245.13537716651231321.3067a421-6c2f-48a9-b77c-1e38e19146e6.10e2aa49-52ca-4e79-9a61-b6422978afb9" style="width:24px; height:24px; vertical-align:middle;">
-       </a>
-        <a href="download.html" class="download-btn">📥 Скачать</a>
-    </nav>
-</header>
+    <header class="topbar">
+        <div class="logo">📚 BurmalPedia</div>
+        <nav class="nav">
+            <a href="#features">Функции</a>
+            <a href="#how">Как работает</a>
+            <a href="#tech">Технологии</a>
+            <a href="download.html" class="download-btn">📥 Скачать</a>
+            <a href="https://t.me/burmalpedia" class="tg-btn" target="_blank">
+                <img src="https://store-images.s-microsoft.com/image/apps.55245.13537716651231321.3067a421-6c2f-48a9-b77c-1e38e19146e6.10e2aa49-52ca-4e79-9a61-b6422978afb9" alt="Telegram">
+            </a>
+        </nav>
+    </header>
 
-   <!-- Главный блок -->
-<section class="hero">
-    <h1>BurmalPedia</h1>
-    <p>Современная вики-система с облачной базой данных, продвинутой модерацией и удобным десктопным приложением.</p>
-    <div class="hero-buttons">
-        <a href="web.html" class="btn btn-web">🌐 Веб-версия</a>
-        <a href="download.html" class="btn btn-download">📥 Скачать</a>
-    </div>
-</section>
-   <!-- Функции -->
-<section id="features" class="features">
-    <div class="feature-card">
-        <div class="icon">👥</div>
-        <h3>Система ролей</h3>
-        <p>User, Moder, Admin — гибкая иерархия пользователей с разными правами</p>
-    </div>
-    <div class="feature-card">
-        <div class="icon">📝</div>
-        <h3>Тикеты</h3>
-        <p>Пользователи предлагают статьи, модераторы и админы проверяют</p>
-    </div>
-    <div class="feature-card">
-        <div class="icon">☁️</div>
-        <h3>Облачная БД</h3>
-        <p>Microsoft SQL Server в облаке — доступ 24/7 из любой точки</p>
-    </div>
-    <div class="feature-card">
-        <div class="icon">⭐</div>
-        <h3>Модерация</h3>
-        <p>Звёздная система — модераторы выбирают лучшие предложения</p>
-    </div>
-    <div class="feature-card">
-        <div class="icon">🔐</div>
-        <h3>Безопасность</h3>
-        <p>SHA-256 хеширование паролей, блокировка с апелляцией</p>
-    </div>
-    <div class="feature-card">
-        <div class="icon">🎨</div>
-        <h3>Тёмный дизайн</h3>
-        <p>Современный интерфейс в тёмных тонах с неоновыми акцентами</p>
-    </div>
-    <div class="feature-card">
-        <div class="icon">🆕</div>
-        <h3>Патч 1.1.1</h3>
-        <p>Жалобы на комментарии, статья дня, баг-фиксы и улучшения</p>
-    </div>
-</section>
-
-    <!-- Патч 1.1.1 -->
-<section style="background: #16213e; padding: 60px 20px; text-align: center;">
-    <h2 style="font-size: 32px; margin-bottom: 30px; color: #e94560;">🆕 Патч 1.1.1 — Список нововведений</h2>
-    <div style="max-width: 600px; margin: 0 auto; text-align: left; color: #ccc; font-size: 16px; line-height: 2;">
-        <p>✅ <strong>Жалобы на комментарии</strong> — пользователи могут пожаловаться на нарушения</p>
-        <p>✅ <strong>Удаление комментариев</strong> — модераторы и админы могут удалять нежелательные комментарии</p>
-        <p>✅ <strong>Статья дня</strong> — администратор вручную выбирает лучшую статью</p>
-        <p>✅ <strong>Двойной клик у модераторов</strong> — быстрый просмотр тикетов и статей</p>
-        <p>✅ <strong>Кнопка обновления</strong> — на главном экране для обновления списка статей</p>
-        <p>✅ <strong>Исправление ошибок</strong> — улучшена стабильность и безопасность</p>
-    </div>
-</section>
-
-    <!-- Как работает -->
-    <section id="how" class="how-it-works">
-        <h2>Как это работает</h2>
-        <div class="steps">
-            <div class="step">
-                <div class="step-number">1</div>
-                <h3 style="color:#4ecca3;">Регистрация</h3>
-                <p style="color:#ccc;">Создайте аккаунт в приложении</p>
-            </div>
-            <div class="step">
-                <div class="step-number">2</div>
-                <h3 style="color:#4ecca3;">Тикет</h3>
-                <p style="color:#ccc;">Отправьте предложение статьи</p>
-            </div>
-            <div class="step">
-                <div class="step-number">3</div>
-                <h3 style="color:#4ecca3;">Модерация</h3>
-                <p style="color:#ccc;">Модератор выбирает лучшее</p>
-            </div>
-            <div class="step">
-                <div class="step-number">4</div>
-                <h3 style="color:#4ecca3;">Публикация</h3>
-                <p style="color:#ccc;">Админ одобряет — статья в вики!</p>
-            </div>
+    <section class="hero">
+        <h1>BurmalPedia</h1>
+        <p>Современная вики-система с облачной базой данных, продвинутой модерацией и удобным десктопным приложением.</p>
+        <div class="hero-buttons">
+            <a href="web.html" class="btn btn-web">🌐 Веб-версия</a>
+            <a href="download.html" class="btn btn-download">📥 Скачать</a>
         </div>
     </section>
 
-    <!-- Технологии -->
+    <section id="features" class="features">
+        <div class="feature-card"><div class="icon">👥</div><h3>Система ролей</h3><p>User, Moder, Admin — гибкая иерархия пользователей с разными правами</p></div>
+        <div class="feature-card"><div class="icon">📝</div><h3>Тикеты</h3><p>Пользователи предлагают статьи, модераторы и админы проверяют</p></div>
+        <div class="feature-card"><div class="icon">☁️</div><h3>Облачная БД</h3><p>Microsoft SQL Server в облаке — доступ 24/7</p></div>
+        <div class="feature-card"><div class="icon">⭐</div><h3>Модерация</h3><p>Звёздная система — модераторы выбирают лучшие предложения</p></div>
+        <div class="feature-card"><div class="icon">🔐</div><h3>Безопасность</h3><p>SHA-256 хеширование паролей, блокировка с апелляцией</p></div>
+        <div class="feature-card"><div class="icon">🎨</div><h3>Тёмный дизайн</h3><p>Современный интерфейс в тёмных тонах с неоновыми акцентами</p></div>
+        <div class="feature-card"><div class="icon">🆕</div><h3>Патч 1.1.1</h3><p>Жалобы на комментарии, статья дня, баг-фиксы и улучшения</p></div>
+    </section>
+
+    <section style="background: #16213e; padding: 60px 20px; text-align: center;">
+        <h2 style="font-size: 32px; margin-bottom: 30px; color: #e94560;">🆕 Патч 1.1.1 — Список нововведений</h2>
+        <div style="max-width: 600px; margin: 0 auto; text-align: left; color: #ccc; font-size: 16px; line-height: 2;">
+            <p>✅ <strong>Жалобы на комментарии</strong> — пользователи могут пожаловаться на нарушения</p>
+            <p>✅ <strong>Удаление комментариев</strong> — модераторы и админы могут удалять нежелательные комментарии</p>
+            <p>✅ <strong>Статья дня</strong> — администратор вручную выбирает лучшую статью</p>
+            <p>✅ <strong>Двойной клик у модераторов</strong> — быстрый просмотр тикетов и статей</p>
+            <p>✅ <strong>Кнопка обновления</strong> — на главном экране для обновления списка статей</p>
+            <p>✅ <strong>Исправление ошибок</strong> — улучшена стабильность и безопасность</p>
+        </div>
+    </section>
+
+    <section id="how" class="how-it-works">
+        <h2>Как это работает</h2>
+        <div class="steps">
+            <div class="step"><div class="step-number">1</div><h3 style="color:#4ecca3;">Регистрация</h3><p style="color:#ccc;">Создайте аккаунт</p></div>
+            <div class="step"><div class="step-number">2</div><h3 style="color:#4ecca3;">Тикет</h3><p style="color:#ccc;">Предложите статью</p></div>
+            <div class="step"><div class="step-number">3</div><h3 style="color:#4ecca3;">Модерация</h3><p style="color:#ccc;">Модератор выбирает</p></div>
+            <div class="step"><div class="step-number">4</div><h3 style="color:#4ecca3;">Публикация</h3><p style="color:#ccc;">Статья в вики!</p></div>
+        </div>
+    </section>
+
     <section id="tech" class="tech">
         <h2>Технологии</h2>
         <div class="tech-tags">
             <span class="tech-tag">C# WPF (.NET)</span>
             <span class="tech-tag">Microsoft SQL Server</span>
-            <span class="tech-tag">Azure SQL / SmarterASP</span>
-            <span class="tech-tag">Entity Framework</span>
+            <span class="tech-tag">ASP.NET API</span>
+            <span class="tech-tag">GitHub Pages</span>
             <span class="tech-tag">SHA-256</span>
             <span class="tech-tag">Cloud Database</span>
-            <span class="tech-tag">REST API</span>
         </div>
     </section>
 
-    <!-- Подвал -->
     <footer>
         <p>© 2026 <a href="#">BurmalPedia</a>. Создано с ❤️ | <a href="https://t.me/ТВОЙ_КАНАЛ" target="_blank">Telegram</a> | <a href="#">GitHub</a></p>
     </footer>
