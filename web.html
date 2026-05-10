@@ -72,15 +72,16 @@
     </div>
 
     <div class="modal" id="ticketModal">
-        <div class="modal-content">
-            <h2 style="color:#4ecca3;margin-bottom:15px;">📝 Предложить статью</h2>
-            <input type="text" id="ticketTitle" placeholder="Название статьи">
-            <textarea id="ticketDesc" placeholder="Содержание статьи..."></textarea>
-            <button class="btn btn-green" onclick="sendTicket()" style="width:100%;margin-top:10px;">Отправить</button>
-            <button class="btn btn-blue" onclick="closeModals()" style="width:100%;margin-top:5px;">Закрыть</button>
-            <p id="ticketMsg" style="margin-top:10px;"></p>
-        </div>
+    <div class="modal-content">
+        <h2 style="color:#4ecca3;margin-bottom:15px;">📝 Предложить статью</h2>
+        <input type="text" id="ticketTitle" placeholder="Название статьи">
+        <input type="text" id="ticketSummary" placeholder="Краткое описание">
+        <textarea id="ticketDesc" placeholder="Содержание статьи..."></textarea>
+        <button class="btn btn-green" onclick="sendTicket()" style="width:100%;margin-top:10px;">Отправить</button>
+        <button class="btn btn-blue" onclick="closeModals()" style="width:100%;margin-top:5px;">Закрыть</button>
+        <p id="ticketMsg" style="margin-top:10px;"></p>
     </div>
+</div>
 
     <script>
         const API = 'https://reloquent-001-site1.site4future.com';
@@ -187,18 +188,20 @@
             document.getElementById('ticketModal').style.display = 'flex';
         }
 
-        async function sendTicket() {
+       async function sendTicket() {
             const t = document.getElementById('ticketTitle').value;
+            const s = document.getElementById('ticketSummary').value;
             const d = document.getElementById('ticketDesc').value;
             const form = new FormData();
-            form.append('title', t); form.append('description', d);
-            form.append('userId', currentUser.userId); form.append('priority', 'Normal');
+            form.append('title', t);
+            form.append('description', 'ОПИСАНИЕ: ' + s + '\n\nСОДЕРЖАНИЕ СТАТЬИ:\n' + d);
+            form.append('userId', currentUser.userId);
+            form.append('priority', 'Normal');
             const res = await fetch(API + '/ticket.ashx', { method: 'POST', body: form });
             const data = await res.json();
             document.getElementById('ticketMsg').textContent = data.message || data.error;
             if (data.success) setTimeout(() => { closeModals(); }, 1500);
         }
-
         document.getElementById('searchInput').addEventListener('keypress', e => { if (e.key === 'Enter') search(); });
         updateUI();
         loadArticles();
