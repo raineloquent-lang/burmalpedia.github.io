@@ -26,16 +26,17 @@
             z-index: 100;
         }
         
-        .nav .tg-btn {
-            background: #0088cc;
-            padding: 8px 20px;
+       .nav .tg-btn {
+            background: transparent;
+            padding: 4px 8px;
             border-radius: 8px;
             transition: background 0.3s;
+            display: flex;
+            align-items: center;
         }
-        
+
         .nav .tg-btn:hover {
-            background: #0077b5;
-            color: white;
+            background: #0088cc;
         }
         
         .logo {
@@ -296,7 +297,9 @@
         <a href="#features">Функции</a>
         <a href="#how">Как работает</a>
         <a href="#tech">Технологии</a>
-        <a href="https://t.me/burmalpedia" class="tg-btn" target="_blank">📢 Telegram</a>
+       <a href="https://t.me/burmalpedia" class="tg-btn" target="_blank">
+           <img src="https://store-images.s-microsoft.com/image/apps.55245.13537716651231321.3067a421-6c2f-48a9-b77c-1e38e19146e6.10e2aa49-52ca-4e79-9a61-b6422978afb9" style="width:24px; height:24px; vertical-align:middle;">
+       </a>
         <a href="download.html" class="download-btn">📥 Скачать</a>
     </nav>
 </header>
@@ -308,9 +311,6 @@
     <div class="hero-buttons">
         <a href="web.html" class="btn btn-web">🌐 Веб-версия</a>
         <a href="download.html" class="btn btn-download">📥 Скачать</a>
-    </div>
-    <div class="hero-buttons" style="margin-top: 10px;">
-        <a href="https://t.me/ТВОЙ_КАНАЛ" class="btn btn-telegram" target="_blank">📢 Telegram-канал</a>
     </div>
 </section>
    <!-- Функции -->
