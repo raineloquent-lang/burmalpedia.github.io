@@ -50,7 +50,6 @@
 
     <div class="container" id="content"><p style="text-align:center;padding:40px;">Загрузка...</p></div>
 
-    <!-- Модалки -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <h2 style="color:#e94560;margin-bottom:15px;">🔐 Вход</h2>
@@ -112,15 +111,17 @@
             const u = document.getElementById('loginUsername').value;
             const p = document.getElementById('loginPassword').value;
             const form = new FormData();
-            form.append('username', u); form.append('password', p);
-            const res = await fetch(API + '/auth.ashx?action=login', { method: 'POST', body: form });
+            form.append('username', u); form.append('password', p); form.append('action', 'login');
+            const res = await fetch(API + '/auth.ashx', { method: 'POST', body: form });
             const data = await res.json();
             if (data.success) {
                 currentUser = data;
                 localStorage.setItem('burmal_user', JSON.stringify(data));
-                updateUI(); closeModals();
+                updateUI(); closeModals(); loadArticles();
             } else {
-                document.getElementById('loginError').textContent = data.error;
+                document.getElementById('loginError').textContent =
+                    data.error === 'Wrong username or password' ? 'Неверный логин или пароль' :
+                    data.error === 'Account is blocked' ? 'Аккаунт заблокирован' : data.error;
             }
         }
 
@@ -129,13 +130,15 @@
             const e = document.getElementById('regEmail').value;
             const p = document.getElementById('regPassword').value;
             const form = new FormData();
-            form.append('username', u); form.append('email', e); form.append('password', p);
-            const res = await fetch(API + '/auth.ashx?action=register', { method: 'POST', body: form });
+            form.append('username', u); form.append('email', e); form.append('password', p); form.append('action', 'register');
+            const res = await fetch(API + '/auth.ashx', { method: 'POST', body: form });
             const data = await res.json();
             if (data.success) {
                 alert('Регистрация успешна!'); closeModals();
             } else {
-                document.getElementById('regError').textContent = data.error;
+                document.getElementById('regError').textContent =
+                    data.error === 'Fill all fields' ? 'Заполните все поля' :
+                    data.error === 'User already exists' ? 'Пользователь уже существует' : data.error;
             }
         }
 
