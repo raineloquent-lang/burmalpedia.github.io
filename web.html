@@ -9,7 +9,7 @@
         body { background: #1a1a2e; color: white; font-family: 'Segoe UI', Arial, sans-serif; }
         .header { background: #16213e; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .logo { font-size: 22px; font-weight: bold; color: #e94560; }
-        .nav { display: flex; gap: 10px; align-items: center; }
+        .nav { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         .btn { padding: 8px 18px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; text-decoration: none; display: inline-block; }
         .btn-red { background: #e94560; color: white; }
         .btn-green { background: #4ecca3; color: white; }
@@ -32,7 +32,8 @@
         .comment-text { margin-top: 5px; font-size: 14px; }
         .search-box { padding: 8px 12px; border-radius: 8px; border: none; background: #0f3460; color: white; width: 200px; }
         .user-info { color: #4ecca3; font-size: 14px; }
-        @media (max-width: 600px) { .header { flex-direction: column; } .nav { flex-wrap: wrap; justify-content: center; } }
+        .appeal-banner { display: none; background: #c0392b; padding: 15px; text-align: center; margin-bottom: 15px; border-radius: 10px; }
+        @media (max-width: 600px) { .header { flex-direction: column; } .nav { justify-content: center; } }
     </style>
 </head>
 <body>
@@ -48,55 +49,52 @@
         </div>
     </div>
 
-    <div class="container" id="content"><p style="text-align:center;padding:40px;">Загрузка...</p></div>
-    <div id="appealBanner" style="display:none;background:#c0392b;padding:15px;text-align:center;margin-bottom:15px;border-radius:10px;">
-        <p style="margin-bottom:10px;">⚠️ Ваш аккаунт заблокирован!</p>
-        <button class="btn btn-red" onclick="showAppeal()">📨 Подать апелляцию</button>
-</div>
-
-    <div class="modal" id="loginModal">
-        <div class="modal-content">
-            <h2 style="color:#e94560;margin-bottom:15px;">🔐 Вход</h2>
-            <input type="text" id="loginUsername" placeholder="Имя пользователя">
-            <input type="password" id="loginPassword" placeholder="Пароль">
-            <button class="btn btn-red" onclick="login()" style="width:100%;margin-top:10px;">Войти</button>
-            <button class="btn btn-blue" onclick="closeModals()" style="width:100%;margin-top:5px;">Закрыть</button>
-            <p id="loginError" style="color:red;margin-top:10px;"></p>
+    <div class="container">
+        <div id="appealBanner" class="appeal-banner">
+            <p style="margin-bottom:10px;">⚠️ Ваш аккаунт заблокирован!</p>
+            <button class="btn btn-red" onclick="showAppeal()">📨 Подать апелляцию</button>
         </div>
+        <div id="content"><p style="text-align:center;padding:40px;">Загрузка...</p></div>
     </div>
 
-    <div class="modal" id="registerModal">
-        <div class="modal-content">
-            <h2 style="color:#4ecca3;margin-bottom:15px;">📝 Регистрация</h2>
-            <input type="text" id="regUsername" placeholder="Имя пользователя">
-            <input type="email" id="regEmail" placeholder="Email">
-            <input type="password" id="regPassword" placeholder="Пароль">
-            <button class="btn btn-green" onclick="register()" style="width:100%;margin-top:10px;">Зарегистрироваться</button>
-            <button class="btn btn-blue" onclick="closeModals()" style="width:100%;margin-top:5px;">Закрыть</button>
-            <p id="regError" style="color:red;margin-top:10px;"></p>
-        </div>
-    </div>
+    <!-- Модалки -->
+    <div class="modal" id="loginModal"><div class="modal-content">
+        <h2 style="color:#e94560;margin-bottom:15px;">🔐 Вход</h2>
+        <input type="text" id="loginUsername" placeholder="Имя пользователя">
+        <input type="password" id="loginPassword" placeholder="Пароль">
+        <button class="btn btn-red" onclick="login()" style="width:100%;margin-top:10px;">Войти</button>
+        <button class="btn btn-blue" onclick="closeModals()" style="width:100%;margin-top:5px;">Закрыть</button>
+        <p id="loginError" style="color:red;margin-top:10px;"></p>
+    </div></div>
 
-    <div class="modal" id="ticketModal">
-        <div class="modal-content">
-            <h2 style="color:#4ecca3;margin-bottom:15px;">📝 Предложить статью</h2>
-            <input type="text" id="ticketTitle" placeholder="Название статьи">
-            <input type="text" id="ticketSummary" placeholder="Краткое описание">
-            <textarea id="ticketDesc" placeholder="Содержание статьи..."></textarea>
-            <button class="btn btn-green" onclick="sendTicket()" style="width:100%;margin-top:10px;">Отправить</button>
-            <button class="btn btn-blue" onclick="closeModals()" style="width:100%;margin-top:5px;">Закрыть</button>
-            <p id="ticketMsg" style="margin-top:10px;"></p>
-        </div>
-    <div class="modal" id="appealModal">
-        <div class="modal-content">
-            <h2 style="color:#e94560;margin-bottom:15px;">📨 Апелляция</h2>
-            <p style="margin-bottom:10px;color:#ccc;">Опишите почему вас надо разблокировать:</p>
-            <textarea id="appealMessage" placeholder="Ваше сообщение..."></textarea>
-            <button class="btn btn-red" onclick="sendAppeal()" style="width:100%;margin-top:10px;">Отправить</button>
-            <button class="btn btn-blue" onclick="closeModals()" style="width:100%;margin-top:5px;">Закрыть</button>
-            <p id="appealMsg" style="margin-top:10px;"></p>
-        </div>
-    </div>
+    <div class="modal" id="registerModal"><div class="modal-content">
+        <h2 style="color:#4ecca3;margin-bottom:15px;">📝 Регистрация</h2>
+        <input type="text" id="regUsername" placeholder="Имя пользователя">
+        <input type="email" id="regEmail" placeholder="Email">
+        <input type="password" id="regPassword" placeholder="Пароль">
+        <button class="btn btn-green" onclick="register()" style="width:100%;margin-top:10px;">Зарегистрироваться</button>
+        <button class="btn btn-blue" onclick="closeModals()" style="width:100%;margin-top:5px;">Закрыть</button>
+        <p id="regError" style="color:red;margin-top:10px;"></p>
+    </div></div>
+
+    <div class="modal" id="ticketModal"><div class="modal-content">
+        <h2 style="color:#4ecca3;margin-bottom:15px;">📝 Предложить статью</h2>
+        <input type="text" id="ticketTitle" placeholder="Название статьи">
+        <input type="text" id="ticketSummary" placeholder="Краткое описание">
+        <textarea id="ticketDesc" placeholder="Содержание статьи..."></textarea>
+        <button class="btn btn-green" onclick="sendTicket()" style="width:100%;margin-top:10px;">Отправить</button>
+        <button class="btn btn-blue" onclick="closeModals()" style="width:100%;margin-top:5px;">Закрыть</button>
+        <p id="ticketMsg" style="margin-top:10px;"></p>
+    </div></div>
+
+    <div class="modal" id="appealModal"><div class="modal-content">
+        <h2 style="color:#e94560;margin-bottom:15px;">📨 Апелляция</h2>
+        <p style="margin-bottom:10px;color:#ccc;">Опишите почему вас надо разблокировать:</p>
+        <textarea id="appealMessage" placeholder="Ваше сообщение..."></textarea>
+        <button class="btn btn-red" onclick="sendAppeal()" style="width:100%;margin-top:10px;">Отправить</button>
+        <button class="btn btn-blue" onclick="closeModals()" style="width:100%;margin-top:5px;">Закрыть</button>
+        <p id="appealMsg" style="margin-top:10px;"></p>
+    </div></div>
 
     <script>
         const API = 'https://reloquent-001-site1.site4future.com';
@@ -108,12 +106,7 @@
                 document.getElementById('loginBtn').style.display = 'none';
                 document.getElementById('registerBtn').style.display = 'none';
                 document.getElementById('logoutBtn').style.display = 'inline-block';
-        
-                if (currentUser.isBlocked) {
-                    document.getElementById('appealBanner').style.display = 'block';
-                } else {
-                    document.getElementById('appealBanner').style.display = 'none';
-                }
+                document.getElementById('appealBanner').style.display = currentUser.isBlocked ? 'block' : 'none';
             } else {
                 document.getElementById('userInfo').textContent = '';
                 document.getElementById('loginBtn').style.display = 'inline-block';
@@ -125,6 +118,7 @@
 
         function showLogin() { document.getElementById('loginModal').style.display = 'flex'; }
         function showRegister() { document.getElementById('registerModal').style.display = 'flex'; }
+        function showAppeal() { document.getElementById('appealModal').style.display = 'flex'; }
         function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); }
 
         async function login() {
@@ -138,16 +132,12 @@
                 currentUser = data;
                 localStorage.setItem('burmal_user', JSON.stringify(data));
                 updateUI(); closeModals(); loadArticles();
-        
-            if (data.isBlocked) {
-                    alert('⚠️ Ваш аккаунт заблокирован!\nПричина: ' + (data.blockReason || 'Не указана') + 
-                          '\n\nВы можете подать апелляцию.');
+            } else {
+                document.getElementById('loginError').textContent =
+                    data.error === 'Wrong username or password' ? 'Неверный логин или пароль' :
+                    data.error === 'Account is blocked' ? 'Аккаунт заблокирован' : data.error;
             }
-        } else {
-            document.getElementById('loginError').textContent =
-                data.error === 'Wrong username or password' ? 'Неверный логин или пароль' : data.error;
         }
-    }
 
         async function register() {
             const u = document.getElementById('regUsername').value;
@@ -157,13 +147,24 @@
             form.append('username', u); form.append('email', e); form.append('password', p); form.append('action', 'register');
             const res = await fetch(API + '/auth.ashx', { method: 'POST', body: form });
             const data = await res.json();
-            if (data.success) {
-                alert('Регистрация успешна!'); closeModals();
-            } else {
+            if (data.success) { alert('Регистрация успешна!'); closeModals(); }
+            else {
                 document.getElementById('regError').textContent =
                     data.error === 'Fill all fields' ? 'Заполните все поля' :
                     data.error === 'User already exists' ? 'Пользователь уже существует' : data.error;
             }
+        }
+
+        async function sendAppeal() {
+            const msg = document.getElementById('appealMessage').value;
+            if (!msg) return;
+            const form = new FormData();
+            form.append('userId', currentUser.userId);
+            form.append('message', msg);
+            const res = await fetch(API + '/appeal.ashx', { method: 'POST', body: form });
+            const data = await res.json();
+            document.getElementById('appealMsg').textContent = data.message || data.error;
+            if (data.success) setTimeout(() => { closeModals(); }, 1500);
         }
 
         function logout() { currentUser = null; localStorage.removeItem('burmal_user'); updateUI(); window.location.reload(); }
@@ -172,10 +173,8 @@
             const res = await fetch(API + '/articles.ashx?action=all');
             const articles = await res.json();
             let html = '<div id="dayBanner"></div>';
-            if (currentUser) html += '<button class="btn btn-green" onclick="showTicket()" style="margin-bottom:15px;">📝 Предложить статью</button>';
-            articles.forEach(a => {
-                html += `<div class="card" onclick="loadArticle(${a.id})"><h3>${a.title}</h3><p>${a.summary||''}</p><small style="color:#888;">📅 ${a.date}</small></div>`;
-            });
+            if (currentUser && !currentUser.isBlocked) html += '<button class="btn btn-green" onclick="showTicket()" style="margin-bottom:15px;">📝 Предложить статью</button>';
+            articles.forEach(a => html += `<div class="card" onclick="loadArticle(${a.id})"><h3>${a.title}</h3><p>${a.summary||''}</p><small style="color:#888;">📅 ${a.date}</small></div>`);
             document.getElementById('content').innerHTML = html;
             loadArticleOfDay();
         }
@@ -183,32 +182,14 @@
         async function loadArticleOfDay() {
             const res = await fetch(API + '/articles.ashx?action=day');
             const data = await res.json();
-            if (!data.error) {
-                document.getElementById('dayBanner').innerHTML = `<div class="day-banner" onclick="loadArticle(${data.id})"><h2>⭐ СТАТЬЯ ДНЯ</h2><h3>${data.title}</h3><p>${data.summary||''}</p></div>`;
-            }
+            if (!data.error) document.getElementById('dayBanner').innerHTML = `<div class="day-banner" onclick="loadArticle(${data.id})"><h2>⭐ СТАТЬЯ ДНЯ</h2><h3>${data.title}</h3><p>${data.summary||''}</p></div>`;
         }
 
         async function loadArticle(id) {
             const res = await fetch(API + '/articles.ashx?id=' + id);
             const a = await res.json();
-            let html = `
-                <div class="article-full">
-                    <button class="btn btn-blue" onclick="loadArticles()" style="margin-bottom:15px;">← Назад</button>
-                    <h1>${a.title}</h1>
-                    <small style="color:#888;">📅 ${a.date}</small>
-                    <div class="content" style="margin-top:15px;">${a.content}</div>
-                    <hr style="border-color:#0f3460;margin:20px 0;">
-                    <h3 style="color:#4ecca3;margin-bottom:10px;">💬 Комментарии</h3>
-                    <div id="commentsList">Загрузка...</div>
-            `;
-            if (currentUser) {
-                html += `
-                    <div style="display:flex;gap:8px;margin-top:15px;">
-                        <input type="text" id="commentInput" placeholder="Ваш комментарий..." style="flex:1;padding:8px;background:#0f3460;border:none;border-radius:8px;color:white;">
-                        <button class="btn btn-green" onclick="addComment(${a.id})">💬</button>
-                    </div>
-                `;
-            }
+            let html = `<div class="article-full"><button class="btn btn-blue" onclick="loadArticles()" style="margin-bottom:15px;">← Назад</button><h1>${a.title}</h1><small style="color:#888;">📅 ${a.date}</small><div class="content" style="margin-top:15px;">${a.content}</div><hr style="border-color:#0f3460;margin:20px 0;"><h3 style="color:#4ecca3;margin-bottom:10px;">💬 Комментарии</h3><div id="commentsList">Загрузка...</div>`;
+            if (currentUser && !currentUser.isBlocked) html += `<div style="display:flex;gap:8px;margin-top:15px;"><input type="text" id="commentInput" placeholder="Ваш комментарий..." style="flex:1;padding:8px;background:#0f3460;border:none;border-radius:8px;color:white;"><button class="btn btn-green" onclick="addComment(${a.id})">💬</button></div>`;
             html += '</div>';
             document.getElementById('content').innerHTML = html;
             loadComments(id);
@@ -218,9 +199,7 @@
             const res = await fetch(API + '/comments.ashx?articleId=' + articleId);
             const comments = await res.json();
             let html = '';
-            comments.forEach(c => {
-                html += `<div class="comment"><div class="comment-author">👤 ${c.author} • ${c.date}</div><div class="comment-text">${c.content}</div></div>`;
-            });
+            comments.forEach(c => html += `<div class="comment"><div class="comment-author">👤 ${c.author} • ${c.date}</div><div class="comment-text">${c.content}</div></div>`);
             if (!html) html = '<p style="color:#888;">Пока нет комментариев</p>';
             document.getElementById('commentsList').innerHTML = html;
         }
@@ -248,12 +227,9 @@
             document.getElementById('content').innerHTML = html;
         }
 
-        function showTicket() {
-            if (!currentUser) { alert('Войдите в систему!'); return; }
-            document.getElementById('ticketModal').style.display = 'flex';
-        }
+        function showTicket() { document.getElementById('ticketModal').style.display = 'flex'; }
 
-         async function sendTicket() {
+        async function sendTicket() {
             const t = document.getElementById('ticketTitle').value;
             const s = document.getElementById('ticketSummary').value;
             const d = document.getElementById('ticketDesc').value;
@@ -264,26 +240,9 @@
             form.append('priority', 'Normal');
             const res = await fetch(API + '/ticket.ashx', { method: 'POST', body: form });
             const data = await res.json();
-            document.getElementById('ticketMsg').textContent = 
-                data.message || 
-                (data.error === 'Account is blocked' ? 'Аккаунт заблокирован!' : 
-                 data.error === 'Fill all fields' ? 'Заполните все поля!' : data.error);
+            document.getElementById('ticketMsg').textContent = data.message || (data.error === 'Account is blocked' ? 'Аккаунт заблокирован!' : data.error);
             if (data.success) setTimeout(() => { closeModals(); }, 1500);
         }
-        function showAppeal() { document.getElementById('appealModal').style.display = 'flex'; }
-
-        async function sendAppeal() {
-            const msg = document.getElementById('appealMessage').value;
-            if (!msg) return;
-            const form = new FormData();
-            form.append('userId', currentUser.userId);
-            form.append('message', msg);
-            const res = await fetch(API + '/appeal.ashx', { method: 'POST', body: form });
-            const data = await res.json();
-            document.getElementById('appealMsg').textContent = data.message || data.error;
-            if (data.success) setTimeout(() => { closeModals(); }, 1500);
-        }
-        
 
         document.getElementById('searchInput').addEventListener('keypress', e => { if (e.key === 'Enter') search(); });
         updateUI();
