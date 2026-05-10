@@ -57,7 +57,6 @@
         <div id="content"><p style="text-align:center;padding:40px;">Загрузка...</p></div>
     </div>
 
-    <!-- Модалки -->
     <div class="modal" id="loginModal"><div class="modal-content">
         <h2 style="color:#e94560;margin-bottom:15px;">🔐 Вход</h2>
         <input type="text" id="loginUsername" placeholder="Имя пользователя">
@@ -134,8 +133,7 @@
                 updateUI(); closeModals(); loadArticles();
             } else {
                 document.getElementById('loginError').textContent =
-                    data.error === 'Wrong username or password' ? 'Неверный логин или пароль' :
-                    data.error === 'Account is blocked' ? 'Аккаунт заблокирован' : data.error;
+                    data.error === 'Wrong username or password' ? 'Неверный логин или пароль' : data.error;
             }
         }
 
@@ -163,7 +161,8 @@
             form.append('message', msg);
             const res = await fetch(API + '/appeal.ashx', { method: 'POST', body: form });
             const data = await res.json();
-            document.getElementById('appealMsg').textContent = data.message || data.error;
+            document.getElementById('appealMsg').textContent = 
+                data.message === 'Appeal sent' ? 'Апелляция отправлена!' : (data.error || data.message);
             if (data.success) setTimeout(() => { closeModals(); }, 1500);
         }
 
