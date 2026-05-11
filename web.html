@@ -201,7 +201,15 @@
             const res = await fetch(API + '/comments.ashx?articleId=' + articleId);
             const comments = await res.json();
             let html = '';
-            comments.forEach(c => html += `<div class="comment"><div class="comment-author">👤 ${c.author} • ${c.date}</div><div class="comment-text">${c.content}</div></div>`);
+            comments.forEach(c => {
+                html += `<div class="comment">
+                    <div style="display:flex;justify-content:space-between;">
+                        <div class="comment-author">👤 ${c.author} • ${c.date}</div>`;
+                if (currentUser) {
+                    html += `<button onclick="reportComment(${c.id})" style="background:none;border:none;cursor:pointer;font-size:14px;" title="Пожаловаться">🚩</button>`;
+                }
+                html += `</div><div class="comment-text">${c.content}</div></div>`;
+            });
             if (!html) html = '<p style="color:#888;">Пока нет комментариев</p>';
             document.getElementById('commentsList').innerHTML = html;
         }
@@ -244,6 +252,17 @@
             const data = await res.json();
             document.getElementById('ticketMsg').textContent = data.message || (data.error === 'Account is blocked' ? 'Аккаунт заблокирован!' : data.error);
             if (data.success) setTimeout(() => { closeModals(); }, 1500);
+        }
+        async function reportComment(commentId) {
+            const reason = prompt('Причина жалобы:');
+            if (!reason) return;
+            const form = new URLSearchParams();
+            form.append('commentId', commentId);
+            form.append('userId', currentUser.userId);
+            form.append('reason', reason);
+            const res = await fetch(API + '/report_comment.ashx', { method: 'POST', body: form, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
+            const data = await res.json();
+            alert(data.message || data.error || 'Готово!');
         }
         document.getElementById('searchInput').addEventListener('keypress', e => { if (e.key === 'Enter') search(); });
         updateUI();
