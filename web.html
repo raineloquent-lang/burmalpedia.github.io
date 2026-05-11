@@ -270,6 +270,18 @@
                 document.getElementById('ticketMsg').textContent = '❌ Ошибка соединения';
             }
         }
+        async function loadArticleOfDay() {
+            const res = await fetch(API + '/articles.ashx?action=day');
+            const data = await res.json();
+            if (!data.error) {
+                document.getElementById('dayBanner').innerHTML = `
+                    <div class="day-banner" onclick="loadArticle(${data.id})">
+                        <h2>⭐ СТАТЬЯ ДНЯ</h2>
+                        <h3>${data.title}</h3>
+                        <p>${data.summary||''}</p>
+                    </div>`;
+            }
+        }
 
         document.getElementById('searchInput').addEventListener('keypress', e => { if (e.key === 'Enter') search(); });
         updateUI();
