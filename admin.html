@@ -138,16 +138,14 @@
             alert('✅ Статья дня установлена!');
         }
 
-        async function loadTickets() {
+       async function loadTickets() {
             const res = await fetch(API + '/admin_tickets.ashx?action=list');
             const tickets = await res.json();
             currentTickets = tickets;
             let html = '<h3 style="margin-bottom:15px;">🎫 Список тикетов (нажмите для просмотра)</h3>';
             tickets.forEach(t => {
-                html += `<div class="card" onclick="showTicket(${t.id})">
-                    <h3>${t.title}</h3><p>Статус: ${t.status} | ${t.date}</p>
-                    <button class="btn btn-green" onclick="event.stopPropagation(); approveTicket(${t.id})">✅</button>
-                    <button class="btn btn-red" onclick="event.stopPropagation(); rejectTicket(${t.id})">❌</button></div>`;
+                html += `<div class="card" onclick="showTicket(${t.id})" style="cursor:pointer;">
+                    <h3>${t.title}</h3><p>Статус: ${t.status} | ${t.date}</p></div>`;
             });
             if (tickets.length === 0) html += '<p style="color:#888;">Нет тикетов</p>';
             document.getElementById('tabContent').innerHTML = html;
