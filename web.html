@@ -82,7 +82,6 @@
         <input type="text" id="ticketTitle" placeholder="Название статьи">
         <input type="text" id="ticketSummary" placeholder="Краткое описание">
         <textarea id="ticketDesc" placeholder="Содержание статьи..."></textarea>
-        <button class="btn btn-blue" onclick="generateAI()" style="width:100%;margin-top:5px;">🤖 Сгенерировать ИИ (30-120 сек)</button>
         <button class="btn btn-green" onclick="sendTicket()" style="width:100%;margin-top:10px;">Отправить</button>
         <button class="btn btn-blue" onclick="closeModals()" style="width:100%;margin-top:5px;">Закрыть</button>
         <p id="ticketMsg" style="margin-top:10px;"></p>
@@ -243,40 +242,6 @@
             const data = await res.json();
             document.getElementById('ticketMsg').textContent = data.message || (data.error === 'Account is blocked' ? 'Аккаунт заблокирован!' : data.error);
             if (data.success) setTimeout(() => { closeModals(); }, 1500);
-        }
-
-        async function generateAI() {
-            const topic = document.getElementById('ticketTitle').value;
-            alert('Topic: ' + topic); // ← Покажет что в поле
-            if (!topic) { alert('Введите название темы!'); return; }
-    
-            document.getElementById('ticketMsg').textContent = '⏳ ИИ генерирует...';
-    
-            const form = new URLSearchParams();
-            form.append('topic', topic);
-            form.append('userId', currentUser?.userId || '1');
-    
-            alert('Sending: ' + form.toString()); // ← Покажет что отправляется
-            
-            try {
-                const res = await fetch(API + '/ai.ashx', { 
-                    method: 'POST', 
-                    body: form,
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-                });
-                const data = await res.json();
-                alert('Response: ' + JSON.stringify(data)); // ← Покажет ответ
-        
-                if (data.success) {
-                    document.getElementById('ticketTitle').value = data.title;
-                    document.getElementById('ticketDesc').value = 'Статья сгенерирована ИИ. Проверьте в приложении.';
-                    document.getElementById('ticketMsg').textContent = '✅ Готово!';
-                } else {
-                    document.getElementById('ticketMsg').textContent = '❌ ' + (data.error || 'Ошибка');
-                }
-            } catch(e) {
-                alert('Error: ' + e.message);
-            }
         }
         document.getElementById('searchInput').addEventListener('keypress', e => { if (e.key === 'Enter') search(); });
         updateUI();
