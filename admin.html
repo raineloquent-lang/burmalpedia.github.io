@@ -10,12 +10,12 @@
         .header { background: #16213e; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
         .logo { font-size: 22px; font-weight: bold; color: #e94560; }
         .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .btn { padding: 8px 16px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; }
+        .btn { padding: 8px 16px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; display: inline-block; margin: 3px; }
         .btn-red { background: #e94560; color: white; }
         .btn-green { background: #4ecca3; color: white; }
         .btn-gold { background: #f1c40f; color: #1a1a2e; }
         .btn-blue { background: #0f3460; color: white; }
-        .card { background: #16213e; border-radius: 12px; padding: 15px; margin-bottom: 10px; }
+        .card { background: #16213e; border-radius: 12px; padding: 15px; margin-bottom: 10px; cursor: pointer; }
         .card h3 { color: #4ecca3; font-size: 16px; }
         .card p { color: #ccc; font-size: 13px; }
         .login-box { background: #16213e; border-radius: 12px; padding: 30px; max-width: 400px; margin: 50px auto; text-align: center; }
@@ -25,6 +25,10 @@
         .tab-active { background: #4ecca3; color: #1a1a2e; }
         .tab-inactive { background: #0f3460; color: white; }
         .hidden { display: none; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; justify-content: center; align-items: center; }
+        .modal-content { background: #16213e; border-radius: 15px; padding: 30px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; }
+        .modal-content h2 { color: #e94560; margin-bottom: 15px; }
+        .modal-content p { color: #ccc; line-height: 1.6; white-space: pre-wrap; }
     </style>
 </head>
 <body>
@@ -49,16 +53,38 @@
                 <button id="tabArticles" class="tab-active" onclick="showTab('articles')">📄 Статьи</button>
                 <button id="tabTickets" class="tab-inactive" onclick="showTab('tickets')">🎫 Тикеты</button>
             </div>
-
             <div id="tabContent"></div>
+        </div>
+    </div>
+
+    <!-- Модалка просмотра тикета -->
+    <div class="modal" id="ticketModal">
+        <div class="modal-content">
+            <h2 id="modalTitle"></h2>
+            <p id="modalStatus"></p>
+            <p id="modalDate"></p>
+            <hr style="border-color:#0f3460;margin:10px 0;">
+            <p id="modalDesc"></p>
+            <br>
+            <button class="btn btn-green" id="modalApprove">✅ Одобрить</button>
+            <button class="btn btn-red" id="modalReject">❌ Отклонить</button>
+            <button class="btn btn-blue" onclick="closeModal()" style="margin-top:10px;">Закрыть</button>
         </div>
     </div>
 
     <script>
         const API = 'https://reloquent-001-site1.site4future.com';
         let adminUser = JSON.parse(sessionStorage.getItem('admin') || 'null');
+        let currentTickets = [];
 
-        if (adminUser) { document.getElementById('loginBox').classList.add('hidden'); document.getElementById('panel').classList.remove('hidden'); document.getElementById('logoutBtn').style.display = 'block'; showTab('articles'); }
+        if (adminUser) { 
+            document.getElementById('loginBox').classList.add('hidden'); 
+            document.getElementById('panel').classList.remove('hidden'); 
+            document.getElementById('logoutBtn').style.display = 'block'; 
+            showTab('articles'); 
+        }
+
+        function closeModal() { document.getElementById('ticketModal').style.display = 'none'; }
 
         async function login() {
             const form = new URLSearchParams();
@@ -115,13 +141,28 @@
         async function loadTickets() {
             const res = await fetch(API + '/admin_tickets.ashx?action=list');
             const tickets = await res.json();
-            let html = '<h3 style="margin-bottom:15px;">🎫 Список тикетов</h3>';
+            currentTickets = tickets;
+            let html = '<h3 style="margin-bottom:15px;">🎫 Список тикетов (нажмите для просмотра)</h3>';
             tickets.forEach(t => {
-                html += `<div class="card"><h3>${t.title}</h3><p>Статус: ${t.status} | ${t.date}</p>
-                    <button class="btn btn-green" onclick="approveTicket(${t.id})">✅ Одобрить</button>
-                    <button class="btn btn-red" onclick="rejectTicket(${t.id})">❌ Отклонить</button></div>`;
+                html += `<div class="card" onclick="showTicket(${t.id})">
+                    <h3>${t.title}</h3><p>Статус: ${t.status} | ${t.date}</p>
+                    <button class="btn btn-green" onclick="event.stopPropagation(); approveTicket(${t.id})">✅</button>
+                    <button class="btn btn-red" onclick="event.stopPropagation(); rejectTicket(${t.id})">❌</button></div>`;
             });
+            if (tickets.length === 0) html += '<p style="color:#888;">Нет тикетов</p>';
             document.getElementById('tabContent').innerHTML = html;
+        }
+
+        function showTicket(id) {
+            const t = currentTickets.find(x => x.id === id);
+            if (!t) return;
+            document.getElementById('modalTitle').textContent = t.title;
+            document.getElementById('modalStatus').textContent = 'Статус: ' + t.status;
+            document.getElementById('modalDate').textContent = '📅 ' + t.date;
+            document.getElementById('modalDesc').textContent = t.description || 'Нет описания';
+            document.getElementById('modalApprove').onclick = () => { approveTicket(id); closeModal(); };
+            document.getElementById('modalReject').onclick = () => { rejectTicket(id); closeModal(); };
+            document.getElementById('ticketModal').style.display = 'flex';
         }
 
         async function approveTicket(id) {
@@ -129,7 +170,6 @@
             form.append('action', 'approve');
             form.append('ticketId', id);
             await fetch(API + '/admin_tickets.ashx', { method: 'POST', body: form, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
-            alert('✅ Тикет одобрен!');
             loadTickets();
         }
 
@@ -138,7 +178,6 @@
             form.append('action', 'reject');
             form.append('ticketId', id);
             await fetch(API + '/admin_tickets.ashx', { method: 'POST', body: form, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
-            alert('❌ Тикет отклонён');
             loadTickets();
         }
     </script>
