@@ -47,6 +47,7 @@
             <button class="btn btn-red" id="loginBtn" onclick="showLogin()">Войти</button>
             <button class="btn btn-green" id="registerBtn" onclick="showRegister()">Регистрация</button>
             <button class="btn btn-blue" id="logoutBtn" onclick="logout()" style="display:none;">Выйти</button>
+            <button class="btn btn-red" id="adminBtn" onclick="window.location.href='admin.html'" style="display:none;">⚙️ Админ</button>
         </div>
     </div>
 
@@ -106,16 +107,17 @@
                 document.getElementById('loginBtn').style.display = 'none';
                 document.getElementById('registerBtn').style.display = 'none';
                 document.getElementById('logoutBtn').style.display = 'inline-block';
+                document.getElementById('adminBtn').style.display = currentUser.role === 'Admin' ? 'inline-block' : 'none';
                 document.getElementById('appealBanner').style.display = currentUser.isBlocked ? 'block' : 'none';
             } else {
                 document.getElementById('userInfo').textContent = '';
                 document.getElementById('loginBtn').style.display = 'inline-block';
                 document.getElementById('registerBtn').style.display = 'inline-block';
                 document.getElementById('logoutBtn').style.display = 'none';
+                document.getElementById('adminBtn').style.display = 'none';
                 document.getElementById('appealBanner').style.display = 'none';
             }
         }
-
         function showLogin() { document.getElementById('loginModal').style.display = 'flex'; }
         function showRegister() { document.getElementById('registerModal').style.display = 'flex'; }
         function showAppeal() { document.getElementById('appealModal').style.display = 'flex'; }
