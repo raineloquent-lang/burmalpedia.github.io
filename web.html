@@ -244,6 +244,32 @@
             if (data.success) setTimeout(() => { closeModals(); }, 1500);
         }
 
+        async function generateAI() {
+            const topic = document.getElementById('ticketTitle').value;
+            if (!topic) { alert('Введите название темы!'); return; }
+    
+            document.getElementById('ticketMsg').textContent = '⏳ ИИ генерирует...';
+    
+            const form = new FormData();
+            form.append('topic', topic);
+            form.append('userId', currentUser?.userId || '1');
+    
+            try {
+                const res = await fetch(API + '/ai.ashx', { method: 'POST', body: form });
+                const data = await res.json();
+        
+                if (data.success) {
+                    document.getElementById('ticketTitle').value = data.title;
+                    document.getElementById('ticketDesc').value = 'Статья сгенерирована ИИ. Проверьте в приложении.';
+                    document.getElementById('ticketMsg').textContent = '✅ Готово! Отправьте тикет.';
+                } else {
+                    document.getElementById('ticketMsg').textContent = '❌ ' + (data.error || 'Ошибка');
+                }
+            } catch(e) {
+                document.getElementById('ticketMsg').textContent = '❌ Ошибка соединения';
+            }
+        }
+
         document.getElementById('searchInput').addEventListener('keypress', e => { if (e.key === 'Enter') search(); });
         updateUI();
         loadArticles();
