@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BurmalPedia Admin</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #1a1a2e; color: white; font-family: 'Segoe UI', Arial, sans-serif; }
+        .header { background: #16213e; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 22px; font-weight: bold; color: #e94560; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .btn { padding: 8px 16px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; }
+        .btn-red { background: #e94560; color: white; }
+        .btn-green { background: #4ecca3; color: white; }
+        .btn-gold { background: #f1c40f; color: #1a1a2e; }
+        .btn-blue { background: #0f3460; color: white; }
+        .card { background: #16213e; border-radius: 12px; padding: 15px; margin-bottom: 10px; }
+        .card h3 { color: #4ecca3; font-size: 16px; }
+        .card p { color: #ccc; font-size: 13px; }
+        .login-box { background: #16213e; border-radius: 12px; padding: 30px; max-width: 400px; margin: 50px auto; text-align: center; }
+        .login-box input { width: 100%; padding: 10px; margin: 8px 0; background: #0f3460; border: none; border-radius: 8px; color: white; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tabs button { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .tab-active { background: #4ecca3; color: #1a1a2e; }
+        .tab-inactive { background: #0f3460; color: white; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">⚙️ BurmalPedia Admin</div>
+        <button class="btn btn-red" id="logoutBtn" onclick="logout()" style="display:none;">Выйти</button>
+    </div>
+
+    <div class="container" id="main">
+        <!-- Форма входа -->
+        <div id="loginBox" class="login-box">
+            <h2 style="color:#e94560;margin-bottom:20px;">🔐 Вход для админа</h2>
+            <input type="text" id="adminUser" placeholder="Логин">
+            <input type="password" id="adminPass" placeholder="Пароль">
+            <button class="btn btn-red" onclick="login()" style="width:100%;margin-top:10px;">Войти</button>
+            <p id="loginError" style="color:red;margin-top:10px;"></p>
+        </div>
+
+        <!-- Панель управления -->
+        <div id="panel" class="hidden">
+            <div class="tabs">
+                <button id="tabArticles" class="tab-active" onclick="showTab('articles')">📄 Статьи</button>
+                <button id="tabTickets" class="tab-inactive" onclick="showTab('tickets')">🎫 Тикеты</button>
+            </div>
+
+            <div id="tabContent"></div>
+        </div>
+    </div>
+
+    <script>
+        const API = 'https://reloquent-001-site1.site4future.com';
+        let adminUser = JSON.parse(sessionStorage.getItem('admin') || 'null');
+
+        if (adminUser) { document.getElementById('loginBox').classList.add('hidden'); document.getElementById('panel').classList.remove('hidden'); document.getElementById('logoutBtn').style.display = 'block'; showTab('articles'); }
+
+        async function login() {
+            const form = new URLSearchParams();
+            form.append('username', document.getElementById('adminUser').value);
+            form.append('password', document.getElementById('adminPass').value);
+            const res = await fetch(API + '/admin_login.ashx', { method: 'POST', body: form, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
+            const data = await res.json();
+            if (data.success) {
+                adminUser = data;
+                sessionStorage.setItem('admin', JSON.stringify(data));
+                document.getElementById('loginBox').classList.add('hidden');
+                document.getElementById('panel').classList.remove('hidden');
+                document.getElementById('logoutBtn').style.display = 'block';
+                showTab('articles');
+            } else {
+                document.getElementById('loginError').textContent = 'Доступ запрещён';
+            }
+        }
+
+        function logout() {
+            adminUser = null;
+            sessionStorage.removeItem('admin');
+            document.getElementById('loginBox').classList.remove('hidden');
+            document.getElementById('panel').classList.add('hidden');
+            document.getElementById('logoutBtn').style.display = 'none';
+        }
+
+        function showTab(tab) {
+            document.getElementById('tabArticles').className = tab === 'articles' ? 'tab-active' : 'tab-inactive';
+            document.getElementById('tabTickets').className = tab === 'tickets' ? 'tab-active' : 'tab-inactive';
+            if (tab === 'articles') loadArticles();
+            else loadTickets();
+        }
+
+        async function loadArticles() {
+            const res = await fetch(API + '/articles.ashx?action=all');
+            const articles = await res.json();
+            let html = '<h3 style="margin-bottom:15px;">⭐ Выберите статью дня</h3>';
+            articles.forEach(a => {
+                html += `<div class="card"><h3>${a.title}</h3><p>${a.summary||''}</p>
+                    <button class="btn btn-gold" onclick="setDay(${a.id})">⭐ Статья дня</button></div>`;
+            });
+            document.getElementById('tabContent').innerHTML = html;
+        }
+
+        async function setDay(id) {
+            const form = new URLSearchParams();
+            form.append('articleId', id);
+            form.append('userId', adminUser.userId);
+            await fetch(API + '/admin_set_day.ashx', { method: 'POST', body: form, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
+            alert('✅ Статья дня установлена!');
+        }
+
+        async function loadTickets() {
+            const res = await fetch(API + '/admin_tickets.ashx?action=list');
+            const tickets = await res.json();
+            let html = '<h3 style="margin-bottom:15px;">🎫 Список тикетов</h3>';
+            tickets.forEach(t => {
+                html += `<div class="card"><h3>${t.title}</h3><p>Статус: ${t.status} | ${t.date}</p>
+                    <button class="btn btn-green" onclick="approveTicket(${t.id})">✅ Одобрить</button>
+                    <button class="btn btn-red" onclick="rejectTicket(${t.id})">❌ Отклонить</button></div>`;
+            });
+            document.getElementById('tabContent').innerHTML = html;
+        }
+
+        async function approveTicket(id) {
+            const form = new URLSearchParams();
+            form.append('action', 'approve');
+            form.append('ticketId', id);
+            await fetch(API + '/admin_tickets.ashx', { method: 'POST', body: form, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
+            alert('✅ Тикет одобрен!');
+            loadTickets();
+        }
+
+        async function rejectTicket(id) {
+            const form = new URLSearchParams();
+            form.append('action', 'reject');
+            form.append('ticketId', id);
+            await fetch(API + '/admin_tickets.ashx', { method: 'POST', body: form, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
+            alert('❌ Тикет отклонён');
+            loadTickets();
+        }
+    </script>
+</body>
+</html>
