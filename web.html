@@ -247,15 +247,17 @@
 
         async function generateAI() {
             const topic = document.getElementById('ticketTitle').value;
+            alert('Topic: ' + topic); // ← Покажет что в поле
             if (!topic) { alert('Введите название темы!'); return; }
     
             document.getElementById('ticketMsg').textContent = '⏳ ИИ генерирует...';
     
-            // Отправляем через URLSearchParams вместо FormData
             const form = new URLSearchParams();
             form.append('topic', topic);
             form.append('userId', currentUser?.userId || '1');
     
+            alert('Sending: ' + form.toString()); // ← Покажет что отправляется
+            
             try {
                 const res = await fetch(API + '/ai.ashx', { 
                     method: 'POST', 
@@ -263,31 +265,19 @@
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
                 });
                 const data = await res.json();
+                alert('Response: ' + JSON.stringify(data)); // ← Покажет ответ
         
                 if (data.success) {
                     document.getElementById('ticketTitle').value = data.title;
                     document.getElementById('ticketDesc').value = 'Статья сгенерирована ИИ. Проверьте в приложении.';
-                    document.getElementById('ticketMsg').textContent = '✅ Готово! Отправьте тикет.';
+                    document.getElementById('ticketMsg').textContent = '✅ Готово!';
                 } else {
                     document.getElementById('ticketMsg').textContent = '❌ ' + (data.error || 'Ошибка');
                 }
             } catch(e) {
-                document.getElementById('ticketMsg').textContent = '❌ Ошибка соединения';
+                alert('Error: ' + e.message);
             }
         }
-        async function loadArticleOfDay() {
-            const res = await fetch(API + '/articles.ashx?action=day');
-            const data = await res.json();
-            if (!data.error) {
-                document.getElementById('dayBanner').innerHTML = `
-                    <div class="day-banner" onclick="loadArticle(${data.id})">
-                        <h2>⭐ СТАТЬЯ ДНЯ</h2>
-                        <h3>${data.title}</h3>
-                        <p>${data.summary||''}</p>
-                    </div>`;
-            }
-        }
-
         document.getElementById('searchInput').addEventListener('keypress', e => { if (e.key === 'Enter') search(); });
         updateUI();
         loadArticles();
