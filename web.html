@@ -3,270 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BurmalPedia Web</title>
+    <title>BurmalPedia — Выбор темы</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #1a1a2e; color: white; font-family: 'Segoe UI', Arial, sans-serif; }
-        .header { background: #16213e; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .logo { font-size: 22px; font-weight: bold; color: #e94560; }
-        .nav { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        .btn { padding: 8px 18px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; text-decoration: none; display: inline-block; }
-        .btn-red { background: #e94560; color: white; }
-        .btn-green { background: #4ecca3; color: white; }
-        .btn-blue { background: #0f3460; color: white; }
-        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
-        .card { background: #16213e; border-radius: 12px; padding: 20px; margin-bottom: 15px; cursor: pointer; }
-        .card h3 { color: #4ecca3; margin-bottom: 8px; }
-        .card p { color: #ccc; font-size: 14px; }
-        .day-banner { background: linear-gradient(135deg, #e94560, #0f3460); border-radius: 12px; padding: 25px; margin-bottom: 20px; cursor: pointer; }
-        .day-banner h2 { color: #f1c40f; margin-bottom: 5px; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; justify-content: center; align-items: center; }
-        .modal-content { background: #16213e; border-radius: 15px; padding: 30px; max-width: 450px; width: 90%; }
-        .modal input, .modal textarea { width: 100%; padding: 10px; margin: 8px 0; background: #0f3460; border: none; border-radius: 8px; color: white; }
-        .modal textarea { height: 100px; resize: vertical; }
-        .article-full { background: #16213e; border-radius: 12px; padding: 25px; }
-        .article-full h1 { color: #e94560; margin-bottom: 10px; }
-        .article-full .content { color: #ccc; line-height: 1.8; white-space: pre-wrap; }
-        .comment { background: #0f3460; border-radius: 8px; padding: 10px; margin-bottom: 8px; }
-        .comment-author { color: #4ecca3; font-size: 13px; }
-        .comment-text { margin-top: 5px; font-size: 14px; }
-        .search-box { padding: 8px 12px; border-radius: 8px; border: none; background: #0f3460; color: white; width: 200px; }
-        .user-info { color: #4ecca3; font-size: 14px; }
-        .appeal-banner { display: none; background: #c0392b; padding: 15px; text-align: center; margin-bottom: 15px; border-radius: 10px; }
-        @media (max-width: 600px) { .header { flex-direction: column; } .nav { justify-content: center; } }
+        body { background: #1a1a2e; color: white; font-family: 'Segoe UI', Arial, sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .container { text-align: center; padding: 40px 20px; }
+        h1 { font-size: 42px; color: #e94560; margin-bottom: 15px; }
+        p { color: #ccc; font-size: 18px; margin-bottom: 40px; }
+        .cards { display: flex; gap: 25px; flex-wrap: wrap; justify-content: center; }
+        .card { background: #16213e; border-radius: 20px; padding: 40px; width: 220px; text-align: center; cursor: pointer; transition: transform 0.3s; text-decoration: none; color: white; }
+        .card:hover { transform: scale(1.05); }
+        .card .icon { font-size: 60px; margin-bottom: 15px; }
+        .card h2 { font-size: 22px; color: #4ecca3; margin-bottom: 10px; }
+        .card p { font-size: 13px; color: #ccc; margin-bottom: 0; }
+        .back-link { display: block; color: #4ecca3; text-decoration: none; margin-top: 40px; font-size: 14px; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo">📚 BurmalPedia Web</div>
-        <div class="nav">
-            <a href="download.html" class="btn btn-red" style="font-size:12px;">💻 Скачать полную версию</a>
-            <input type="text" class="search-box" id="searchInput" placeholder="🔍 Поиск...">
-            <button class="btn btn-blue" onclick="search()">Найти</button>
-            <span class="user-info" id="userInfo"></span>
-            <button class="btn btn-red" id="loginBtn" onclick="showLogin()">Войти</button>
-            <button class="btn btn-green" id="registerBtn" onclick="showRegister()">Регистрация</button>
-            <button class="btn btn-blue" id="logoutBtn" onclick="logout()" style="display:none;">Выйти</button>
-            <button class="btn btn-red" id="adminBtn" onclick="window.location.href='admin.html'" style="display:none;">⚙️ Админ</button>
-        </div>
-    </div>
-
     <div class="container">
-        <div id="appealBanner" class="appeal-banner">
-            <p style="margin-bottom:10px;">⚠️ Ваш аккаунт заблокирован!</p>
-            <button class="btn btn-red" onclick="showAppeal()">📨 Подать апелляцию</button>
+        <h1>📚 BurmalPedia</h1>
+        <p>Выберите интересующую вас тему</p>
+        <div class="cards">
+            <a href="web-politics.html" class="card">
+                <div class="icon">🏛️</div>
+                <h2>Политика</h2>
+                <p>Обзоры и новости политики</p>
+            </a>
+            <a href="web-games.html" class="card">
+                <div class="icon">🎮</div>
+                <h2>Игры</h2>
+                <p>Обзоры игровой индустрии</p>
+            </a>
+            <a href="web-news.html" class="card">
+                <div class="icon">📰</div>
+                <h2>Новости</h2>
+                <p>Общие новости и события</p>
+            </a>
         </div>
-        <div id="content"><p style="text-align:center;padding:40px;">Загрузка...</p></div>
+        <a href="index.html" class="back-link">← На главную</a>
     </div>
-
-    <div class="modal" id="loginModal"><div class="modal-content">
-        <h2 style="color:#e94560;margin-bottom:15px;">🔐 Вход</h2>
-        <input type="text" id="loginUsername" placeholder="Имя пользователя">
-        <input type="password" id="loginPassword" placeholder="Пароль">
-        <button class="btn btn-red" onclick="login()" style="width:100%;margin-top:10px;">Войти</button>
-        <button class="btn btn-blue" onclick="closeModals()" style="width:100%;margin-top:5px;">Закрыть</button>
-        <p id="loginError" style="color:red;margin-top:10px;"></p>
-    </div></div>
-
-    <div class="modal" id="registerModal"><div class="modal-content">
-        <h2 style="color:#4ecca3;margin-bottom:15px;">📝 Регистрация</h2>
-        <input type="text" id="regUsername" placeholder="Имя пользователя">
-        <input type="email" id="regEmail" placeholder="Email">
-        <input type="password" id="regPassword" placeholder="Пароль">
-        <button class="btn btn-green" onclick="register()" style="width:100%;margin-top:10px;">Зарегистрироваться</button>
-        <button class="btn btn-blue" onclick="closeModals()" style="width:100%;margin-top:5px;">Закрыть</button>
-        <p id="regError" style="color:red;margin-top:10px;"></p>
-    </div></div>
-
-    <div class="modal" id="ticketModal"><div class="modal-content">
-        <h2 style="color:#4ecca3;margin-bottom:15px;">📝 Предложить статью</h2>
-        <input type="text" id="ticketTitle" placeholder="Название статьи">
-        <input type="text" id="ticketSummary" placeholder="Краткое описание">
-        <textarea id="ticketDesc" placeholder="Содержание статьи..."></textarea>
-        <button class="btn btn-green" onclick="sendTicket()" style="width:100%;margin-top:10px;">Отправить</button>
-        <button class="btn btn-blue" onclick="closeModals()" style="width:100%;margin-top:5px;">Закрыть</button>
-        <p id="ticketMsg" style="margin-top:10px;"></p>
-    </div></div>
-
-    <div class="modal" id="appealModal"><div class="modal-content">
-        <h2 style="color:#e94560;margin-bottom:15px;">📨 Апелляция</h2>
-        <p style="margin-bottom:10px;color:#ccc;">Опишите почему вас надо разблокировать:</p>
-        <textarea id="appealMessage" placeholder="Ваше сообщение..."></textarea>
-        <button class="btn btn-red" onclick="sendAppeal()" style="width:100%;margin-top:10px;">Отправить</button>
-        <button class="btn btn-blue" onclick="closeModals()" style="width:100%;margin-top:5px;">Закрыть</button>
-        <p id="appealMsg" style="margin-top:10px;"></p>
-    </div></div>
-
-    <script>
-        const API = 'https://reloquent-001-site1.site4future.com';
-        let currentUser = JSON.parse(localStorage.getItem('burmal_user') || 'null');
-
-        function updateUI() {
-            if (currentUser) {
-                document.getElementById('userInfo').textContent = '👤 ' + currentUser.username;
-                document.getElementById('loginBtn').style.display = 'none';
-                document.getElementById('registerBtn').style.display = 'none';
-                document.getElementById('logoutBtn').style.display = 'inline-block';
-                document.getElementById('adminBtn').style.display = currentUser.role === 'Admin' ? 'inline-block' : 'none';
-                document.getElementById('appealBanner').style.display = currentUser.isBlocked ? 'block' : 'none';
-            } else {
-                document.getElementById('userInfo').textContent = '';
-                document.getElementById('loginBtn').style.display = 'inline-block';
-                document.getElementById('registerBtn').style.display = 'inline-block';
-                document.getElementById('logoutBtn').style.display = 'none';
-                document.getElementById('adminBtn').style.display = 'none';
-                document.getElementById('appealBanner').style.display = 'none';
-            }
-        }
-        function showLogin() { document.getElementById('loginModal').style.display = 'flex'; }
-        function showRegister() { document.getElementById('registerModal').style.display = 'flex'; }
-        function showAppeal() { document.getElementById('appealModal').style.display = 'flex'; }
-        function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); }
-
-        async function login() {
-            const u = document.getElementById('loginUsername').value;
-            const p = document.getElementById('loginPassword').value;
-            const form = new FormData();
-            form.append('username', u); form.append('password', p); form.append('action', 'login');
-            const res = await fetch(API + '/auth.ashx', { method: 'POST', body: form });
-            const data = await res.json();
-            if (data.success) {
-                currentUser = data;
-                localStorage.setItem('burmal_user', JSON.stringify(data));
-                updateUI(); closeModals(); loadArticles();
-            } else {
-                document.getElementById('loginError').textContent =
-                    data.error === 'Wrong username or password' ? 'Неверный логин или пароль' : data.error;
-            }
-        }
-
-        async function register() {
-            const u = document.getElementById('regUsername').value;
-            const e = document.getElementById('regEmail').value;
-            const p = document.getElementById('regPassword').value;
-            const form = new FormData();
-            form.append('username', u); form.append('email', e); form.append('password', p); form.append('action', 'register');
-            const res = await fetch(API + '/auth.ashx', { method: 'POST', body: form });
-            const data = await res.json();
-            if (data.success) { alert('Регистрация успешна!'); closeModals(); }
-            else {
-                document.getElementById('regError').textContent =
-                    data.error === 'Fill all fields' ? 'Заполните все поля' :
-                    data.error === 'User already exists' ? 'Пользователь уже существует' : data.error;
-            }
-        }
-
-        async function sendAppeal() {
-            const msg = document.getElementById('appealMessage').value;
-            if (!msg) return;
-            const form = new FormData();
-            form.append('userId', currentUser.userId);
-            form.append('message', msg);
-            const res = await fetch(API + '/appeal.ashx', { method: 'POST', body: form });
-            const data = await res.json();
-            document.getElementById('appealMsg').textContent = 
-                data.message === 'Appeal sent' ? 'Апелляция отправлена!' : (data.error || data.message);
-            if (data.success) setTimeout(() => { closeModals(); }, 1500);
-        }
-
-        function logout() { currentUser = null; localStorage.removeItem('burmal_user'); updateUI(); window.location.reload(); }
-
-        async function loadArticles() {
-            const res = await fetch(API + '/articles.ashx?action=all');
-            const articles = await res.json();
-            let html = '<div id="dayBanner"></div>';
-            if (currentUser && !currentUser.isBlocked) html += '<button class="btn btn-green" onclick="showTicket()" style="margin-bottom:15px;">📝 Предложить статью</button>';
-            articles.forEach(a => html += `<div class="card" onclick="loadArticle(${a.id})"><h3>${a.title}</h3><p>${a.summary||''}</p><small style="color:#888;">📅 ${a.date}</small></div>`);
-            document.getElementById('content').innerHTML = html;
-            loadArticleOfDay();
-        }
-
-        async function loadArticleOfDay() {
-            const res = await fetch(API + '/articles.ashx?action=day');
-            const data = await res.json();
-            if (!data.error) document.getElementById('dayBanner').innerHTML = `<div class="day-banner" onclick="loadArticle(${data.id})"><h2>⭐ СТАТЬЯ ДНЯ</h2><h3>${data.title}</h3><p>${data.summary||''}</p></div>`;
-        }
-
-        async function loadArticle(id) {
-            const res = await fetch(API + '/articles.ashx?id=' + id);
-            const a = await res.json();
-            let html = `<div class="article-full"><button class="btn btn-blue" onclick="loadArticles()" style="margin-bottom:15px;">← Назад</button><h1>${a.title}</h1><small style="color:#888;">📅 ${a.date}</small><div class="content" style="margin-top:15px;">${a.content}</div><hr style="border-color:#0f3460;margin:20px 0;"><h3 style="color:#4ecca3;margin-bottom:10px;">💬 Комментарии</h3><div id="commentsList">Загрузка...</div>`;
-            if (currentUser && !currentUser.isBlocked) html += `<div style="display:flex;gap:8px;margin-top:15px;"><input type="text" id="commentInput" placeholder="Ваш комментарий..." style="flex:1;padding:8px;background:#0f3460;border:none;border-radius:8px;color:white;"><button class="btn btn-green" onclick="addComment(${a.id})">💬</button></div>`;
-            html += '</div>';
-            document.getElementById('content').innerHTML = html;
-            loadComments(id);
-        }
-
-        async function loadComments(articleId) {
-            const res = await fetch(API + '/comments.ashx?articleId=' + articleId);
-            const comments = await res.json();
-            let html = '';
-            comments.forEach(c => {
-                html += `<div class="comment">
-                    <div style="display:flex;justify-content:space-between;">
-                        <div class="comment-author">👤 ${c.author} • ${c.date}</div>`;
-                if (currentUser) {
-                    html += `<button onclick="reportComment(${c.id})" style="background:none;border:none;cursor:pointer;font-size:14px;" title="Пожаловаться">🚩</button>`;
-                }
-                html += `</div><div class="comment-text">${c.content}</div></div>`;
-            });
-            if (!html) html = '<p style="color:#888;">Пока нет комментариев</p>';
-            document.getElementById('commentsList').innerHTML = html;
-        }
-
-        async function addComment(articleId) {
-            const content = document.getElementById('commentInput').value;
-            if (!content) return;
-            const form = new FormData();
-            form.append('articleId', articleId);
-            form.append('userId', currentUser.userId);
-            form.append('content', content);
-            await fetch(API + '/comments.ashx?action=add', { method: 'POST', body: form });
-            loadComments(articleId);
-            document.getElementById('commentInput').value = '';
-        }
-
-        async function search() {
-            const q = document.getElementById('searchInput').value;
-            if (!q) { loadArticles(); return; }
-            const res = await fetch(API + '/articles.ashx?action=search&q=' + encodeURIComponent(q));
-            const articles = await res.json();
-            let html = '';
-            articles.forEach(a => html += `<div class="card" onclick="loadArticle(${a.id})"><h3>${a.title}</h3><p>${a.summary||''}</p></div>`);
-            if (!html) html = '<p style="text-align:center;padding:40px;">Ничего не найдено</p>';
-            document.getElementById('content').innerHTML = html;
-        }
-
-        function showTicket() { document.getElementById('ticketModal').style.display = 'flex'; }
-
-        async function sendTicket() {
-            const t = document.getElementById('ticketTitle').value;
-            const s = document.getElementById('ticketSummary').value;
-            const d = document.getElementById('ticketDesc').value;
-            const form = new FormData();
-            form.append('title', t);
-            form.append('description', 'ОПИСАНИЕ: ' + s + '\n\nСОДЕРЖАНИЕ СТАТЬИ:\n' + d);
-            form.append('userId', currentUser.userId);
-            form.append('priority', 'Normal');
-            const res = await fetch(API + '/ticket.ashx', { method: 'POST', body: form });
-            const data = await res.json();
-            document.getElementById('ticketMsg').textContent = data.message || (data.error === 'Account is blocked' ? 'Аккаунт заблокирован!' : data.error);
-            if (data.success) setTimeout(() => { closeModals(); }, 1500);
-        }
-        async function reportComment(commentId) {
-            const reason = prompt('Причина жалобы:');
-            if (!reason) return;
-            const form = new URLSearchParams();
-            form.append('commentId', commentId);
-            form.append('userId', currentUser.userId);
-            form.append('reason', reason);
-            const res = await fetch(API + '/report_comment.ashx', { method: 'POST', body: form, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
-            const data = await res.json();
-            alert(data.message || data.error || 'Готово!');
-        }
-        document.getElementById('searchInput').addEventListener('keypress', e => { if (e.key === 'Enter') search(); });
-        updateUI();
-        loadArticles();
-    </script>
 </body>
 </html>
