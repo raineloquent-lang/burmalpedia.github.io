@@ -38,7 +38,7 @@
 
     <!-- Шапка -->
     <div class="header">
-        <div class="logo">🎬 BurmalPedia — Медийность</div>
+        <div class="logo">🏛️ BurmalPedia — Политика</div>
         <div class="nav">
             <input type="text" class="search-box" id="searchInput" placeholder="🔍 Поиск...">
             <button class="btn btn-blue" onclick="search()">Найти</button>
@@ -125,7 +125,7 @@
             const res = await fetch(API + '/articles.ashx?action=all');
             const articles = await res.json();
             let html = '';
-            const filtered = articles.filter(a => a.categoryId === 2);
+            const filtered = articles.filter(a => a.categoryId === 1);
             filtered.forEach(a => html += `<div class="card" onclick="loadArticle(${a.id})"><h3>${a.title}</h3><p>${a.summary||''}</p></div>`);
             if (!html) html = '<p style="text-align:center;">Нет статей</p>';
             document.getElementById('content').innerHTML = html;
@@ -148,7 +148,7 @@
             if (!q) { loadArticles(); return; }
             const res = await fetch(API + '/articles.ashx?action=search&q=' + encodeURIComponent(q));
             const articles = await res.json();
-            const filtered = articles.filter(a => a.categoryId === 2);
+            const filtered = articles.filter(a => a.categoryId === 1);
             let html = '';
             filtered.forEach(a => html += `<div class="card" onclick="loadArticle(${a.id})"><h3>${a.title}</h3><p>${a.summary||''}</p></div>`);
             if (!html) html = '<p>Ничего не найдено</p>';
