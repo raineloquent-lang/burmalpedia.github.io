@@ -164,10 +164,18 @@
         }
 
         async function approveTicket(id) {
+            // Спрашиваем категорию
+            const category = prompt('Выберите тему:\n1 - Политика\n2 - Медийность\n3 - Новости');
+            if (!category || !['1','2','3'].includes(category)) { alert('Неверная тема!'); return; }
+    
+            const categoryId = parseInt(category);
+    
             const form = new URLSearchParams();
             form.append('action', 'approve');
             form.append('ticketId', id);
+            form.append('categoryId', categoryId);
             await fetch(API + '/admin_tickets.ashx', { method: 'POST', body: form, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
+            alert('✅ Тикет одобрен!');
             loadTickets();
         }
 
