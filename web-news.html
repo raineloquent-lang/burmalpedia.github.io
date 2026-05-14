@@ -18,17 +18,24 @@
         .card { background: #16213e; border-radius: 12px; padding: 20px; margin-bottom: 15px; cursor: pointer; }
         .card h3 { color: #4ecca3; margin-bottom: 8px; }
         .card p { color: #ccc; font-size: 14px; }
+        .day-banner { background: linear-gradient(135deg, #e94560, #0f3460); border-radius: 12px; padding: 25px; margin-bottom: 20px; cursor: pointer; }
+        .day-banner h2 { color: #f1c40f; margin-bottom: 5px; font-size: 16px; }
+        .day-banner .topic-tag { display: inline-block; background: #f1c40f; color: #1a1a2e; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold; margin-bottom: 8px; }
         .search-box { padding: 8px 12px; border-radius: 8px; border: none; background: #0f3460; color: white; width: 200px; }
         .user-info { color: #4ecca3; font-size: 14px; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; justify-content: center; align-items: center; }
-        .modal-content { background: #16213e; border-radius: 15px; padding: 30px; max-width: 400px; width: 90%; }
-        .modal input { width: 100%; padding: 10px; margin: 8px 0; background: #0f3460; border: none; border-radius: 8px; color: white; }
+        .modal-content { background: #16213e; border-radius: 15px; padding: 30px; max-width: 450px; width: 90%; max-height: 80vh; overflow-y: auto; }
+        .modal input, .modal textarea { width: 100%; padding: 10px; margin: 8px 0; background: #0f3460; border: none; border-radius: 8px; color: white; }
+        .modal textarea { height: 100px; resize: vertical; }
+        .comment { background: #0f3460; border-radius: 8px; padding: 10px; margin-bottom: 8px; }
+        .comment-author { color: #4ecca3; font-size: 13px; }
+        .comment-text { margin-top: 5px; font-size: 14px; }
         @media (max-width: 600px) { .header { flex-direction: column; } .nav { justify-content: center; } }
     </style>
 </head>
 <body>
 
-    <!-- Навигация по темам -->
+    <!-- Навигация -->
     <div style="background:#0f3460;padding:10px 20px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
         <a href="web.html" style="color:white;text-decoration:none;padding:8px 16px;border-radius:8px;background:#16213e;">🏠 Все темы</a>
         <a href="web-politics.html" style="color:white;text-decoration:none;padding:8px 16px;border-radius:8px;background:#e94560;">🏛️ Политика</a>
@@ -38,16 +45,16 @@
 
     <!-- Шапка -->
     <div class="header">
-        <div class="logo">📰 BurmalPedia — Новости</div>
+        <div class="logo">🎬 BurmalPedia — Медийность</div>
         <div class="nav">
             <input type="text" class="search-box" id="searchInput" placeholder="🔍 Поиск...">
             <button class="btn btn-blue" onclick="search()">Найти</button>
             <span class="user-info" id="userInfo"></span>
             <button class="btn btn-red" id="loginBtn" onclick="document.getElementById('loginModal').style.display='flex'">Войти</button>
             <button class="btn btn-green" id="registerBtn" onclick="document.getElementById('registerModal').style.display='flex'">Регистрация</button>
+            <button class="btn btn-green" id="ticketBtn" onclick="document.getElementById('ticketModal').style.display='flex'" style="display:none;">📝 Предложить</button>
             <button class="btn btn-blue" id="logoutBtn" onclick="logout()" style="display:none;">Выйти</button>
             <button class="btn btn-red" id="adminBtn" onclick="location.href='admin.html'" style="display:none;">⚙️ Админ</button>
-            <a href="web.html" class="btn btn-blue">← К темам</a>
         </div>
     </div>
 
@@ -55,30 +62,39 @@
     <div class="container" id="content"><p style="text-align:center;padding:40px;">Загрузка...</p></div>
 
     <!-- Модалка входа -->
-    <div class="modal" id="loginModal">
-        <div class="modal-content">
-            <h2 style="color:#e94560;margin-bottom:15px;">🔐 Вход</h2>
-            <input type="text" id="loginUsername" placeholder="Имя пользователя">
-            <input type="password" id="loginPassword" placeholder="Пароль">
-            <button class="btn btn-red" onclick="login()" style="width:100%;margin-top:10px;">Войти</button>
-            <button class="btn btn-blue" onclick="closeModals()" style="width:100%;margin-top:5px;">Закрыть</button>
-        </div>
-    </div>
+    <div class="modal" id="loginModal"><div class="modal-content">
+        <h2 style="color:#e94560;margin-bottom:15px;">🔐 Вход</h2>
+        <input type="text" id="loginUsername" placeholder="Имя пользователя">
+        <input type="password" id="loginPassword" placeholder="Пароль">
+        <button class="btn btn-red" onclick="login()" style="width:100%;margin-top:10px;">Войти</button>
+        <button class="btn btn-blue" onclick="closeModals()" style="width:100%;margin-top:5px;">Закрыть</button>
+    </div></div>
 
     <!-- Модалка регистрации -->
-    <div class="modal" id="registerModal">
-        <div class="modal-content">
-            <h2 style="color:#4ecca3;margin-bottom:15px;">📝 Регистрация</h2>
-            <input type="text" id="regUsername" placeholder="Имя пользователя">
-            <input type="email" id="regEmail" placeholder="Email">
-            <input type="password" id="regPassword" placeholder="Пароль">
-            <button class="btn btn-green" onclick="register()" style="width:100%;margin-top:10px;">Зарегистрироваться</button>
-            <button class="btn btn-blue" onclick="closeModals()" style="width:100%;margin-top:5px;">Закрыть</button>
-        </div>
-    </div>
+    <div class="modal" id="registerModal"><div class="modal-content">
+        <h2 style="color:#4ecca3;margin-bottom:15px;">📝 Регистрация</h2>
+        <input type="text" id="regUsername" placeholder="Имя пользователя">
+        <input type="email" id="regEmail" placeholder="Email">
+        <input type="password" id="regPassword" placeholder="Пароль">
+        <button class="btn btn-green" onclick="register()" style="width:100%;margin-top:10px;">Зарегистрироваться</button>
+        <button class="btn btn-blue" onclick="closeModals()" style="width:100%;margin-top:5px;">Закрыть</button>
+    </div></div>
+
+    <!-- Модалка тикета -->
+    <div class="modal" id="ticketModal"><div class="modal-content">
+        <h2 style="color:#4ecca3;margin-bottom:15px;">📝 Предложить статью</h2>
+        <input type="text" id="ticketTitle" placeholder="Название">
+        <input type="text" id="ticketSummary" placeholder="Краткое описание">
+        <textarea id="ticketDesc" placeholder="Содержание..."></textarea>
+        <button class="btn btn-green" onclick="sendTicket()" style="width:100%;margin-top:10px;">Отправить</button>
+        <button class="btn btn-blue" onclick="closeModals()" style="width:100%;margin-top:5px;">Закрыть</button>
+        <p id="ticketMsg" style="margin-top:10px;"></p>
+    </div></div>
 
     <script>
         const API = 'https://reloquent-001-site1.site4future.com';
+        const CATEGORY_ID = 2; // 1=Политика, 2=Медийность, 3=Новости
+        const CATEGORY_NAMES = ['', 'Политика', 'Медийность', 'Новости'];
         let currentUser = JSON.parse(localStorage.getItem('burmal_user') || 'null');
 
         function updateUI() {
@@ -86,12 +102,14 @@
                 document.getElementById('userInfo').textContent = '👤 ' + currentUser.username;
                 document.getElementById('loginBtn').style.display = 'none';
                 document.getElementById('registerBtn').style.display = 'none';
+                document.getElementById('ticketBtn').style.display = 'inline-block';
                 document.getElementById('logoutBtn').style.display = 'inline-block';
                 document.getElementById('adminBtn').style.display = currentUser.role === 'Admin' ? 'inline-block' : 'none';
             } else {
                 document.getElementById('userInfo').textContent = '';
                 document.getElementById('loginBtn').style.display = 'inline-block';
                 document.getElementById('registerBtn').style.display = 'inline-block';
+                document.getElementById('ticketBtn').style.display = 'none';
                 document.getElementById('logoutBtn').style.display = 'none';
                 document.getElementById('adminBtn').style.display = 'none';
             }
@@ -121,26 +139,87 @@
         function logout() { currentUser = null; localStorage.removeItem('burmal_user'); updateUI(); }
         function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); }
 
+        async function sendTicket() {
+            const t = document.getElementById('ticketTitle').value;
+            const s = document.getElementById('ticketSummary').value;
+            const d = document.getElementById('ticketDesc').value;
+            const form = new URLSearchParams();
+            form.append('title', t);
+            form.append('description', 'ОПИСАНИЕ: ' + s + '\n\nСОДЕРЖАНИЕ СТАТЬИ:\n' + d);
+            form.append('userId', currentUser.userId);
+            form.append('priority', 'Normal');
+            const res = await fetch(API + '/ticket.ashx', { method: 'POST', body: form, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
+            const data = await res.json();
+            document.getElementById('ticketMsg').textContent = data.message || 'Отправлено!';
+            if (data.success) setTimeout(closeModals, 1500);
+        }
+
         async function loadArticles() {
             const res = await fetch(API + '/articles.ashx?action=all');
             const articles = await res.json();
-            let html = '';
-            const filtered = articles.filter(a => a.categoryId === 3);
+            let html = '<div id="dayBanner"></div>';
+            const filtered = articles.filter(a => a.categoryId === CATEGORY_ID);
             filtered.forEach(a => html += `<div class="card" onclick="loadArticle(${a.id})"><h3>${a.title}</h3><p>${a.summary||''}</p></div>`);
-            if (!html) html = '<p style="text-align:center;">Нет статей</p>';
+            if (!html.includes('<div class="card"')) html += '<p style="text-align:center;">Нет статей</p>';
             document.getElementById('content').innerHTML = html;
+            loadArticleOfDay();
+        }
+
+        async function loadArticleOfDay() {
+            const res = await fetch(API + '/articles.ashx?action=day');
+            const data = await res.json();
+            if (!data.error && data.categoryId) {
+                const catName = CATEGORY_NAMES[data.categoryId] || 'Общее';
+                document.getElementById('dayBanner').innerHTML = `
+                    <div class="day-banner" onclick="loadArticle(${data.id})">
+                        <span class="topic-tag">${catName}</span>
+                        <h2>⭐ СТАТЬЯ ДНЯ</h2>
+                        <h3>${data.title}</h3>
+                        <p>${data.summary||''}</p>
+                    </div>`;
+            }
         }
 
         async function loadArticle(id) {
             const res = await fetch(API + '/articles.ashx?id=' + id);
             const a = await res.json();
-            document.getElementById('content').innerHTML = `
+            let html = `
                 <div style="background:#16213e;border-radius:12px;padding:25px;">
                     <button class="btn btn-blue" onclick="loadArticles()" style="margin-bottom:15px;">← Назад</button>
                     <h1 style="color:#e94560;">${a.title}</h1>
                     <small style="color:#888;">📅 ${a.date}</small>
                     <div style="color:#ccc;line-height:1.8;white-space:pre-wrap;margin-top:15px;">${a.content}</div>
-                </div>`;
+                    <hr style="border-color:#0f3460;margin:20px 0;">
+                    <h3 style="color:#4ecca3;margin-bottom:10px;">💬 Комментарии</h3>
+                    <div id="commentsList">Загрузка...</div>`;
+            if (currentUser && !currentUser.isBlocked) {
+                html += `
+                    <div style="display:flex;gap:8px;margin-top:15px;">
+                        <input type="text" id="commentInput" placeholder="Ваш комментарий..." style="flex:1;padding:8px;background:#0f3460;border:none;border-radius:8px;color:white;">
+                        <button class="btn btn-green" onclick="addComment(${a.id})">💬</button>
+                    </div>`;
+            }
+            html += '</div>';
+            document.getElementById('content').innerHTML = html;
+            loadComments(id);
+        }
+
+        async function loadComments(articleId) {
+            const res = await fetch(API + '/comments.ashx?articleId=' + articleId);
+            const comments = await res.json();
+            let html = '';
+            comments.forEach(c => html += `<div class="comment"><div class="comment-author">👤 ${c.author} • ${c.date}</div><div class="comment-text">${c.content}</div></div>`);
+            if (!html) html = '<p style="color:#888;">Пока нет комментариев</p>';
+            document.getElementById('commentsList').innerHTML = html;
+        }
+
+        async function addComment(articleId) {
+            const content = document.getElementById('commentInput').value;
+            if (!content) return;
+            const form = new URLSearchParams();
+            form.append('articleId', articleId); form.append('userId', currentUser.userId); form.append('content', content);
+            await fetch(API + '/comments.ashx?action=add', { method: 'POST', body: form, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
+            loadComments(articleId);
         }
 
         async function search() {
@@ -148,7 +227,7 @@
             if (!q) { loadArticles(); return; }
             const res = await fetch(API + '/articles.ashx?action=search&q=' + encodeURIComponent(q));
             const articles = await res.json();
-            const filtered = articles.filter(a => a.categoryId === 3);
+            const filtered = articles.filter(a => a.categoryId === CATEGORY_ID);
             let html = '';
             filtered.forEach(a => html += `<div class="card" onclick="loadArticle(${a.id})"><h3>${a.title}</h3><p>${a.summary||''}</p></div>`);
             if (!html) html = '<p>Ничего не найдено</p>';
